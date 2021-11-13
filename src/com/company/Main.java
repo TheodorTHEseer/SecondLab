@@ -5,17 +5,13 @@ import cretures.pac.Creature;
 import cretures.pac.Enemy;
 import cretures.pac.Hero;
 import items.pac.Equipment;
-import items.pac.Item;
 import items.pac.Weaponry;
 import rooms.pac.Bank;
 import rooms.pac.Shop;
 
-import java.awt.font.ShapeGraphicAttribute;
-import java.io.Console;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class Main {
 
@@ -42,6 +38,9 @@ public class Main {
         ArrayList<Equipment> shopItems = new ArrayList<>();//Всякие приколы в магазе
         Weaponry mySword = new Weaponry("Мой меч", 1, rnd.nextInt(50- 1)+1);
         Hero player = new Hero("Я", 100, 100, 1000, 1, 1000);//хп всегда по дефолту 100
+        FHW.generate();
+        FHW.letsGo();
+
         GameLogic.startKit(player,mySword,xLenght,yLenght);
         int key =0;
         Shop.generateItems();
@@ -51,7 +50,8 @@ public class Main {
                     "[2] - нанять отряд и отправить его в экспедицию.\n" +
                     "[3] - зайти в магазин.\n" +
                     "[4] - зайти в банк.\n" +
-                    "[5] - выйти из игры.");
+                    "[5] - выйти из игры.\n" +
+                    "[6] - 4 практика");
             Scanner in = new Scanner(System.in);
             key = in.nextInt();
             //Цикл для комнаты
