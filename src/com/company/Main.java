@@ -1,5 +1,6 @@
 package com.company;
 
+import FileMgmt.MgmtCfg;
 import GamePlay.pac.*;
 import cretures.pac.Creature;
 import cretures.pac.Enemy;
@@ -9,15 +10,26 @@ import items.pac.Weaponry;
 import rooms.pac.Bank;
 import rooms.pac.Shop;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
         //Переменные для изменения параметров
+        int playerIndex;
+        boolean oldPlayer=true;
+        String playerName="hero";
+        File startCheck = new File(".", "config0.txt");
+        oldPlayer=startCheck.isFile();
+        if (oldPlayer==false)
+            MgmtCfg.createCfg();
+        else
+            System.out.println("С возвращением!");
+        //MgmtCfg.useCfg(playerName);
+        Thread.sleep(2000);
         int yLenght = 3;//кол-во строк
         int xLenght = 7;//кол-во столбцов
         int enemiesMass = 2;//Кол-во врагов
@@ -37,9 +49,9 @@ public class Main {
         ArrayList<Weaponry> shopWeapons = new ArrayList<>();//Оружие в магазине
         ArrayList<Equipment> shopItems = new ArrayList<>();//Всякие приколы в магазе
         Weaponry mySword = new Weaponry("Мой меч", 1, rnd.nextInt(50- 1)+1);
-        Hero player = new Hero("Я", 100, 100, 1000, 1, 1000);//хп всегда по дефолту 100
+        Hero player = new Hero(playerName, 100, 100, 1000, 1, 1000);//хп всегда по дефолту 100
         FHW.generate();
-        FHW.letsGo();
+
 
         GameLogic.startKit(player,mySword,xLenght,yLenght);
         int key =0;
@@ -55,7 +67,7 @@ public class Main {
             Scanner in = new Scanner(System.in);
             key = in.nextInt();
             //Цикл для комнаты
-            if (key==1 ) {
+            if (key==1) {
                 GameLogic.generateEnemies(enemiesMass, enemies, xLenght, yLenght);
                 while (enemies.size() > 0) {
                     if (player.getHp() <= 0)
@@ -109,10 +121,10 @@ public class Main {
                         "500 золотых] Сейчас в отряде находится " + mySquad.size() + " человек.");
                 if(myBankWallet<500 && mySquad.size()==0) {
                     Thread.sleep(200);
-                    System.out.println("Недостаточно средств в банке. \n[1] - выход, никто просто не захочет вступить в Ваш отряд.");
+                    System.out.println("Недостаточно средств в банке. \n[1] - выход.\n#никто не хочет ввязываться в авантюру за копейки.");
                 }
                 moneySpend= in.nextInt();
-                if (moneySpend<=myBankWallet){
+                if (moneySpend<=myBankWallet && moneySpend>=500){
                     System.out.println("Транзакция успешна");
                     myBankWallet=myBankWallet-moneySpend;
                     System.out.println("А сколько вы хотите получить после возвращения экспедиции?");
@@ -138,15 +150,15 @@ public class Main {
             }
             if (key==5)
                 break;
-            if (key>=6){
-                for (int count=1;count>0;count++){
-                    Thread.sleep(100);
-                    System.out.println("Agent Orange");
-                    if(count>2530)
-                        break;
-                }
+            if (key==6)
+                FHW.letsGo();
+            if (key==7){
+                System.out.println("Введите свой индекс");
+                playerIndex=in.nextInt();
+                MgmtCfg.createCfg(playerIndex);
+                MgmtCfg.useCfg(playerName, playerIndex);
             }
-        }
+            }
         System.out.println("Спасибо за игру.");
+        }
     }
-}

@@ -29,18 +29,24 @@ public class Expedition implements Runnable{
             System.out.println("Экспедиция отправлена");
             Thread.sleep(2000);
             while (mySquad.size()>0){
-                for (int count = 0; count<mySquad.size(); count++){
-                    mySquad.get(count).setHp(mySquad.get(count).getHp()-rnd.nextInt(20-1)+1);
-                    if (mySquad.get(count).getHp()<=0){
-                        mySquad.remove(count);
-                        System.out.println(mySquad.get(count).getName() + " умер в экспедиции.");}
-                    reward=reward+rnd.nextInt(150-50)+50;
-                    Thread.sleep(300);
-                    if (reward>=wannaReward)
+                try {
+                    for (int count = 0; count < mySquad.size(); count++) {
+                        mySquad.get(count).setHp(mySquad.get(count).getHp() - rnd.nextInt(20 - 1) + 1);
+                        if (mySquad.get(count).getHp() <= 0) {
+                            mySquad.remove(count);
+                            System.out.println(mySquad.get(count).getName() + " умер в экспедиции.");
+                        }
+                        reward = reward + rnd.nextInt(150 - 50) + 50;
+                        Thread.sleep(300);
+                        if (reward >= wannaReward)
+                            break;
+                    }
+                    if (reward >= wannaReward)
                         break;
                 }
-                if(reward>=wannaReward)
-                    break;
+                catch (ArrayIndexOutOfBoundsException e){
+                    System.out.println("Отряд оказался пуст, воины разбежались");
+                }
             }
             if(mySquad.size()>0){
                 wallet=wallet+reward;
@@ -51,7 +57,7 @@ public class Expedition implements Runnable{
                 if(bonusDrop>80&&bonusDrop<90){
                     String [] Tag = {"Золотистый топор из меди", "Большой палаш", "Тупой камень", "Острый стальной палет от забора"};
                     Weaponry drop = new Weaponry(Tag[rnd.nextInt(3-1)+1], rnd.nextInt(100-5)+5,rnd.nextInt(10-2)+2, rnd.nextInt(1000-40)+40);
-                    System.out.println("Так же ваши наёмники приносит Вам оружие: "  + drop.getName());
+                    System.out.println("#Так же ваши наёмники приносит Вам оружие: "  + drop.getName());
                     player.Equipment.add(drop);
                 }
                 if (bonusDrop>=90&& bonusDrop<=100){
@@ -65,7 +71,7 @@ public class Expedition implements Runnable{
             }
         }
         catch (Exception e){
-            System.out.println("Экспедиция погибла");
+            System.out.println("Экспедиция не была собрана");
         }
     }
 }

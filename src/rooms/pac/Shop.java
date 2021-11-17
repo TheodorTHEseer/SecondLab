@@ -47,6 +47,7 @@ public class Shop {
             }
             System.out.println("Что берём?\n ["+shopWeapons.size()+"] - выход");
             shopKey = in.nextInt();
+            try{ //В действительности всё ограничено if
             if (shopKey < shopWeapons.size()&&shopKey>=0) {
                 if (myBankWallet >= shopWeapons.get(shopKey).getCost()
                         && player.getLvl() >= shopWeapons.get(shopKey).getRequiredLvl()) {
@@ -60,8 +61,9 @@ public class Shop {
                     System.out.println("Уууу, шекелей не хватает. А может уровня? Вперёд к приключениям!");
                 }
             }
-            if (shopKey<0||shopKey>=shopWeapons.size()){
-                System.out.println("Гудбай, так сказать");
+            }
+           catch(IndexOutOfBoundsException e){
+                System.out.println("Прощайте");
             }
         }
 
@@ -75,20 +77,20 @@ public class Shop {
                     " ["+shopItems.size() +"] - выход");
             shopKey = in.nextInt();
 
-            if (shopKey>= shopItems.size()){
-                System.out.println("Заходите ещё");
-            }
-            else {
+            try {
+                if (myBankWallet < shopItems.get(shopKey).getCost()
+                        || player.getLvl() < shopItems.get(shopKey).getRequiredLvl()) {
+                    System.out.println("Уууу, шекелей не хватает. А может нужно ещё подкачаться?");
+                }
                 if (myBankWallet >= shopItems.get(shopKey).getCost()
                         && player.getLvl() >= shopItems.get(shopKey).getRequiredLvl()) {
                     player.Inventory.add(shopItems.get(shopKey));
                     myBankWallet = myBankWallet - shopItems.get(shopKey).getCost();
                     System.out.println("Транзакция успешна.");//<<<
                 }
-                if (myBankWallet < shopItems.get(shopKey).getCost()
-                        || player.getLvl() < shopItems.get(shopKey).getRequiredLvl()) {
-                    System.out.println("Уууу, шекелей не хватает. А может нужно ещё подкачаться?");
-                }
+            }
+            catch (IndexOutOfBoundsException e){
+                System.out.println("Прощайте");
             }
 
         }
