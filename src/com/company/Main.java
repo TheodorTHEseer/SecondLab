@@ -1,6 +1,7 @@
 package com.company;
 
 import FileMgmt.MgmtCfg;
+import FileMgmt.Start;
 import GamePlay.pac.*;
 import cretures.pac.Creature;
 import cretures.pac.Enemy;
@@ -9,31 +10,39 @@ import items.pac.Equipment;
 import items.pac.Weaponry;
 import rooms.pac.Bank;
 import rooms.pac.Shop;
+import rooms.pac.SquadException;
+import rooms.pac.Tavern;
 
+import javax.swing.plaf.TableHeaderUI;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import static FileMgmt.MgmtCfg.*;
+import static GamePlay.pac.Expedition.getNPE;
+import static GamePlay.pac.GameLogic.gameMenuDisplay;
+import static rooms.pac.Tavern.getTest;
+
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-
+        Hero player = new Hero("My Hero", 100, 100, 1000, 1, 1000); //Даже если сейв умер, то персонаж будет создан
+        int myBankWallet=100;//Деньги на банковском счете по дефолту
         //Переменные для изменения параметров
         int playerIndex;
-        boolean oldPlayer=true;
-        String playerName="hero";
-        File startCheck = new File(".", "config0.txt");
-        oldPlayer=startCheck.isFile();
-        if (oldPlayer==false)
-            MgmtCfg.createCfg();
-        else
-            System.out.println("С возвращением!");
-        //MgmtCfg.useCfg(playerName);
-        Thread.sleep(2000);
+        if (Start.uploadCheck()==false) {
+            Start.upload();
+            createCfg();
+            player.setName(useCfg(player.getName()));
+        }
+        else{
+            loadGame(player,myBankWallet);
+            System.out.println("С возвращением! " + player.getName());
+        }
+        Thread.sleep(1575);
         int yLenght = 3;//кол-во строк
-        int xLenght = 7;//кол-во столбцов
-        int enemiesMass = 2;//Кол-во врагов
-        int myBankWallet=100;
+        int xLenght = 3;//кол-во столбцов
+        int enemiesMass = 5;//Кол-во врагов
         //Классы
         Random rnd = new Random();
         Field field = new Field(yLenght, xLenght);//Чтобы работать с картой
@@ -49,7 +58,7 @@ public class Main {
         ArrayList<Weaponry> shopWeapons = new ArrayList<>();//Оружие в магазине
         ArrayList<Equipment> shopItems = new ArrayList<>();//Всякие приколы в магазе
         Weaponry mySword = new Weaponry("Мой меч", 1, rnd.nextInt(50- 1)+1);
-        Hero player = new Hero(playerName, 100, 100, 1000, 1, 1000);//хп всегда по дефолту 100
+        //хп всегда по дефолту 100
         FHW.generate();
 
 
@@ -57,15 +66,15 @@ public class Main {
         int key =0;
         Shop.generateItems();
         while (player.getHp()>0) {
-            System.out.println("Что вы хотите сделать?\n"+
-                    "[1] - войти в комнату с врагами.\n"+
-                    "[2] - нанять отряд и отправить его в экспедицию.\n" +
-                    "[3] - зайти в магазин.\n" +
-                    "[4] - зайти в банк.\n" +
-                    "[5] - выйти из игры.\n" +
-                    "[6] - 4 практика");
+            gameMenuDisplay();
             Scanner in = new Scanner(System.in);
-            key = in.nextInt();
+            try {
+                key = in.nextInt();
+            }
+            catch (InputMismatchException e){
+                System.out.println("Введите цифру!");
+                Thread.sleep(1200);
+            }
             //Цикл для комнаты
             if (key==1) {
                 GameLogic.generateEnemies(enemiesMass, enemies, xLenght, yLenght);
@@ -136,6 +145,7 @@ public class Main {
                     }
                     Thread expedition = new Thread(new Expedition(mySquad, wannaReward, myBankWallet,player), "ExpeditionThread");
                     expedition.start();
+                    new SquadException(expedition, getNPE(mySquad));
                 }
                 key=0;
             }
@@ -148,15 +158,14 @@ public class Main {
                 reserve=reserve-player.getMoney();
                 myBankWallet=+reserve;//TODO переписать банк для работы с отрядом
             }
-            if (key==5)
-                break;
+            if (key==5){
+                gameSave(player, myBankWallet);
+                break;}
             if (key==6)
                 FHW.letsGo();
             if (key==7){
-                System.out.println("Введите свой индекс");
-                playerIndex=in.nextInt();
-                MgmtCfg.createCfg(playerIndex);
-                MgmtCfg.useCfg(playerName, playerIndex);
+                renameCfg();
+              player.setName(useCfg(player.getName()));
             }
             }
         System.out.println("Спасибо за игру.");

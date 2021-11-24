@@ -6,6 +6,7 @@ import items.pac.Equipment;
 import items.pac.Weaponry;
 
 import javax.swing.*;
+import javax.transaction.xa.XAResource;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Random;
@@ -44,7 +45,7 @@ public class Expedition implements Runnable{
                     if (reward >= wannaReward)
                         break;
                 }
-                catch (ArrayIndexOutOfBoundsException e){
+                catch (IndexOutOfBoundsException e){
                     System.out.println("Отряд оказался пуст, воины разбежались");
                 }
             }
@@ -67,11 +68,23 @@ public class Expedition implements Runnable{
                 }
             }
             if(mySquad.size()==0){
-                System.out.println("Все члены экспедиции погибли.");
+                System.out.println("Весь отряд уничтожен!");
             }
         }
-        catch (Exception e){
-            System.out.println("Экспедиция не была собрана");
+        catch (InterruptedException e){
+            System.out.println("Экспедиция была прервана!");
         }
+    }
+    public static Exception getNPE(ArrayList<Creature> mySquad){
+        try {
+            if (mySquad.get(0).getName()==null)
+                return new NullPointerException("Отряд уничтожен");
+        }
+        catch (IndexOutOfBoundsException e){
+            mySquad.add(null);
+            if (mySquad.get(0).getName()==null)
+                return new NullPointerException("Отряд уничтожен");
+        }
+        return new Exception("Всё алрайт");
     }
 }

@@ -70,4 +70,14 @@ public class GameLogic {
         player.xPos = rnd.nextInt(xLenght - 1) + 1;
         player.yPos = rnd.nextInt(yLenght - 1) + 1;
     }
+    public static void gameMenuDisplay(){
+        System.out.println("Что вы хотите сделать?\n"+
+                "[1] - войти в комнату с врагами.\n"+
+                "[2] - нанять отряд и отправить его в экспедицию.\n" +
+                "[3] - зайти в магазин.\n" +
+                "[4] - зайти в банк.\n" +
+                "[5] - выйти из игры.\n" +
+                "[6] - 4 практика.\n" +
+                "[7] - сменить имя.");
+    }
 }

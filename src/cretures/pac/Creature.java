@@ -7,7 +7,7 @@ import items.pac.Weaponry;
 import java.util.ArrayList;
 
 public class Creature {
-    private String name;
+    public String name;
     protected int hp;
     protected int damage;
     protected int lvl;

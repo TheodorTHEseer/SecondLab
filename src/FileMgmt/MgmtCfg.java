@@ -1,74 +1,128 @@
 package FileMgmt;
 
+import cretures.pac.Hero;
+
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MgmtCfg {
     static Scanner in = new Scanner(System.in);
-    static String cfgWrite="";
+    public static String home = System.getProperty("user.home");
+    public static int findex;
+    public static String patch;
     public static void createCfg(){
         try {
-            File fileCreateStream = new File(".", "config0.txt");
-            boolean created = fileCreateStream.createNewFile();
+            File fileCreateStream = new File(home + File.separator + "Desktop" + File.separator +
+                    "testGameFolder"+File.separator+ "config0.txt");
+            fileCreateStream.createNewFile();
             System.out.println("Был создан файл конфигурации. Его индекс = 0.");
+        }
+        catch (IOException exception){
+            System.out.println(exception.getMessage());
+        }
+        try {
+            FileWriter fileWriter = new FileWriter(home + File.separator + "Desktop" + File.separator +
+                    "testGameFolder"+File.separator+ "config0.txt" , false);
+            System.out.println("Как бы вы хотели назвать своего героя?");
+            String cfgWrite=in.nextLine();
+            fileWriter.write(cfgWrite);
+            fileWriter.close();
+        }
+        catch (IOException exception){
+            System.out.println(exception.getMessage());
+        }
+    }
 
-        }
-        catch (IOException exception){
-            System.out.println(exception.getMessage());
-        }
+    public static void getIndex(int index){
+        findex=index;
+        patch = "config"+findex+".txt";
+    }
+
+    public static void renameCfg(){
+
         try {
-            FileWriter fileWriter = new FileWriter("config0.txt" , false);
+            FileWriter fileWriter = new FileWriter(home + File.separator + "Desktop" + File.separator +
+                    "testGameFolder"+File.separator+ "config0.txt" , false);
             System.out.println("Как бы вы хотели назвать своего героя?");
-            String cfgWrite=System.console().readLine();
+            String cfgWrite= in.nextLine();
             fileWriter.write(cfgWrite);
+            fileWriter.close();
         }
         catch (IOException exception){
             System.out.println(exception.getMessage());
         }
     }
-    public static void createCfg(int index){
-        try {
-            File fileCreateStream = new File(".", "config"+index+".txt");
-            boolean created = fileCreateStream.createNewFile();
-            System.out.println("Был создан файл конфигурации. Его индекс = " + index+".");
-        }
-        catch (IOException exception){
-            System.out.println(exception.getMessage());
-        }
-        try {
-            FileWriter fileWriter = new FileWriter("config"+index+".txt" , false);
-            System.out.println("Как бы вы хотели назвать своего героя?");
-            InputStream a = System.in;
-            InputStreamReader b = new InputStreamReader(a);
-            BufferedReader reader = new BufferedReader(b);
-            cfgWrite= reader.readLine();
-            fileWriter.write(cfgWrite);
-        }
-        catch (IOException exception){
-            System.out.println(exception.getMessage());
-        }
-    }
-    public static void useCfg(String playerName){
+    public static String useCfg(String playerName){
         try{
-            FileReader fileReader = new FileReader("config0.txt");
+            FileReader fileReader = new FileReader(home + File.separator + "Desktop" + File.separator +
+                    "testGameFolder"+File.separator+ "config0.txt");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             playerName= bufferedReader.readLine();
             if (playerName==null)
                 playerName="My Hero";
+            fileReader.close();
         }
         catch (Exception exception){
             System.out.println(exception.getMessage());
+        }
+        return playerName;
+    }
+
+    public static void gameSave(Hero player, int bankWallet){
+        try{
+        FileWriter fileWriter = new FileWriter (home + File.separator + "Desktop" + File.separator +
+                "testGameFolder"+File.separator+ "config1.txt" , false);
+        fileWriter.write("Name: " + player.getName()  +
+                "\n");
+            fileWriter.write("Hp: " + player.getHp()  +
+                    "\n");
+            fileWriter.write("Damage: " + player.getDamage() +
+                    "\n");
+            fileWriter.write("Exp: " + player.getExp()  +
+                    "\n");
+            fileWriter.write("DS: " + player.getDexteritySkill()  +
+                    "\n");
+            fileWriter.write("Money: " + player.getMoney() +
+                    "\n");
+            fileWriter.write("BankMoney: " + bankWallet +
+                    "\n");
+            fileWriter.close();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
         }
     }
-    public static void useCfg(String playerName, int index){
-        try{
-            FileReader fileReader = new FileReader("config"+index+".txt");
+    static public void loadGame(Hero player, int bankWallet){//TODO переделать достование данных
+        String line = null;
+        try {
+            FileReader fileReader = new FileReader(home + File.separator + "Desktop" + File.separator +
+                    "testGameFolder"+File.separator+ "config1.txt");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            playerName= bufferedReader.readLine();
-            System.out.println(playerName);
+            String words [] = {"Name: ", "Hp: ","Damage: ", "Exp: ", "DS: ", "Money: ", "BankMoney: "};
+            ArrayList<String> lines = new ArrayList<>();
+            ArrayList<String> flines = new ArrayList<>();
+            while ((line = bufferedReader.readLine()) != null) {
+                lines.add(line);
+            }
+            bufferedReader.close();
+            for (int count=0; count<lines.size();count++) {
+                String fLine = lines.get(count).replace(words[count], "");
+                flines.add(fLine);
+            }
+
+            player.getSave(flines);
+            try {
+                int money = Integer.parseInt(flines.get(0));
+                bankWallet = money;
+            }
+            catch (NumberFormatException exception) //Тут может не быть цифр. Но банковский счёт - не часть персанажа, поэтому нестрашно
+            {
+                System.out.println("Файл был повреждён.");
+            }
         }
-        catch (Exception exception){
-            System.out.println(exception.getMessage());
+        catch (Exception e){
+            System.out.println(e.getMessage());
         }
     }
 }

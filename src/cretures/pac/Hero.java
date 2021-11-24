@@ -1,7 +1,9 @@
 package cretures.pac;
 
+import items.pac.Weaponry;
 import org.w3c.dom.ranges.RangeException;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
@@ -57,16 +59,39 @@ public class Hero extends Creature {
     char holdspace;
     public Hero (String name, int hp, int damage, int exp, int dexteritySkill, int money) {
         super(name, hp, dexteritySkill, damage);
+        holdspace = name.charAt(0);
+        this.shortName= "["+holdspace + "]";
         this.money = money;
         this.exp = exp;
         this.magicId = 2;
         this.damage=damage;
         this.defaultDamage=damage;
         this.lvl = exp /1000;
-        holdspace = name.charAt(0);
-        this.shortName= "["+holdspace + "]";
     }
     public void display(){
         System.out.println(getName() + " dmg: " + this.getDamage());
+    }
+    public void getSave(ArrayList<String> flines){
+        if (flines.size()==7){
+        this.setName(flines.get(0));
+        flines.remove(0);
+        this.hp = xRelay(flines);
+        this.damage=xRelay(flines);
+        this.exp=xRelay(flines);
+        this.dexteritySkill=xRelay(flines);
+        this.money=xRelay(flines);
+        }
+        else
+            System.out.println("Файл сохранения повреждён!");
+    }
+    private int xRelay(ArrayList <String> flines){
+        int x = Integer.parseInt(flines.get(0));
+        flines.remove(0);
+        return x;
+    }
+    public static void getStartedSword(Hero player){
+        Random rnd = new Random();
+        Weaponry mySword = new Weaponry("Мой меч", 1, rnd.nextInt(50- 1)+1);
+        player.Equipment.add(mySword);
     }
 }
