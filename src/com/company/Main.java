@@ -25,7 +25,6 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         Hero player = new Hero("My Hero", 100, 100, 1000, 1, 1000); //Даже если сейв умер, то персонаж будет создан
         int myBankWallet=100;//Деньги на банковском счете по дефолту
-        //Переменные для изменения параметров
         int playerIndex;
         if (Start.uploadCheck()==false) {
             Start.upload();
@@ -45,20 +44,14 @@ public class Main {
         Field field = new Field(yLenght, xLenght);//Чтобы работать с картой
         Fight fight = new Fight();
         String[] SMembersNames = {"Марис","Кас","Биттер","Олег","Дамир","Радис", "Кир","Ваард"};//Для членов отряда имена
-        //Не уверен, что тут все имена - имена
         String MyMap[][] = new String[yLenght][xLenght];//карта для комнаты
         ArrayList<Creature> mySquad = new ArrayList<>();
-        ArrayList<Weaponry> myStorage = new ArrayList<>();//Хранилище, в перспективе, оно будет хранить собранное оружие,
-        //которое человек не хочет выкидывать,
-        //но имеет желание продать
+        ArrayList<Weaponry> myStorage = new ArrayList<>();//TODO добавить хранилище
         ArrayList<Enemy> enemies = new ArrayList<>();//Множество врагов
         ArrayList<Weaponry> shopWeapons = new ArrayList<>();//Оружие в магазине
-        ArrayList<Equipment> shopItems = new ArrayList<>();//Всякие приколы в магазе
+        ArrayList<Equipment> shopItems = new ArrayList<>();//Всякие приколы в магазине
         Weaponry mySword = new Weaponry("Мой меч", 1, rnd.nextInt(50- 1)+1);
-        //хп всегда по дефолту 100
         FHW.generate();
-
-
         GameLogic.startKit(player,mySword,xLenght,yLenght);
         int key =0;
         Shop.generateItems();
