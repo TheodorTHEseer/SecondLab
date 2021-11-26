@@ -153,10 +153,7 @@ public class Main {
                 Shop.getInto(player,myBankWallet);
             }
             if (key==4){
-                int reserve = player.getMoney();
-                Bank.getInto(player, myBankWallet);
-                reserve=reserve-player.getMoney();
-                myBankWallet=+reserve;//TODO переписать банк для работы с отрядом
+                myBankWallet=Bank.getInto(player, myBankWallet);//TODO переписать банк для работы с отрядом
             }
             if (key==5){
                 gameSave(player, myBankWallet);

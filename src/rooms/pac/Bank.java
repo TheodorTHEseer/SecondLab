@@ -3,19 +3,25 @@ package rooms.pac;
 import cretures.pac.Creature;
 import cretures.pac.Hero;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Bank {
     static int convert;
 
 
-    public static void getInto(Hero player, int myBankWallet){
+    public static int getInto(Hero player, int myBankWallet){
         Scanner in = new Scanner(System.in);
-        int key;
+        int key = 0;
         System.out.println("Есть желание положить деньги в банк, чтобы совершать покупки в магазинах?\n" +
                 "[1] - да\n" +
                 "[2] - нет");
-        key = in.nextInt();
+        try {
+            key = in.nextInt();
+        }
+        catch (InputMismatchException exception) {
+            System.out.println("сирьюсли?");
+        }
         if (key==1){
             if(player.getMoney()<0)
                 System.out.println("Есть проблема: ваши карманы пусты.");
@@ -30,8 +36,10 @@ public class Bank {
                 if(convert<= player.getMoney()){
                     System.out.println("Транзакция успешна.");
                     player.setMoney(player.getMoney()-convert);
+                    myBankWallet=myBankWallet+convert;
                 }
             }
         }
+        return myBankWallet;
     }
 }
