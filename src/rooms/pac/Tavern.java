@@ -19,7 +19,6 @@ public class Tavern extends Thread{ //TODO провести экстермина
            throw new NullPointerException();
        }
        System.out.println(win);
-
    }
    public void run(){
        getTest(wallet);

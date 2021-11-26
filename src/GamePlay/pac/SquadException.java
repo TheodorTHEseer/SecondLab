@@ -1,4 +1,4 @@
-package rooms.pac;
+package GamePlay.pac;
 
 public class SquadException implements Thread.UncaughtExceptionHandler{
     public SquadException(Thread allMobsController, Exception test) {

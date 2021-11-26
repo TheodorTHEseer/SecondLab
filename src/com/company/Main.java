@@ -1,6 +1,5 @@
 package com.company;
 
-import FileMgmt.MgmtCfg;
 import FileMgmt.Start;
 import GamePlay.pac.*;
 import cretures.pac.Creature;
@@ -10,18 +9,15 @@ import items.pac.Equipment;
 import items.pac.Weaponry;
 import rooms.pac.Bank;
 import rooms.pac.Shop;
-import rooms.pac.SquadException;
-import rooms.pac.Tavern;
+import GamePlay.pac.SquadException;
 
-import javax.swing.plaf.TableHeaderUI;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 import static FileMgmt.MgmtCfg.*;
+import static GamePlay.pac.Expedition.checkExpeditionStatus;
 import static GamePlay.pac.Expedition.getNPE;
 import static GamePlay.pac.GameLogic.gameMenuDisplay;
-import static rooms.pac.Tavern.getTest;
 
 public class Main {
 
@@ -123,31 +119,17 @@ public class Main {
                 }
             }
             if (key==2){
-                int moneySpend;
-                int wannaReward;
-                System.out.println("Сколько вы хотите потратить на экипировку экспедиции? [Стоимость отряда не может быть" +
-                        " меньше " +
-                        "500 золотых] Сейчас в отряде находится " + mySquad.size() + " человек.");
-                if(myBankWallet<500 && mySquad.size()==0) {
-                    Thread.sleep(200);
-                    System.out.println("Недостаточно средств в банке. \n[1] - выход.\n#никто не хочет ввязываться в авантюру за копейки.");
-                }
-                moneySpend= in.nextInt();
-                if (moneySpend<=myBankWallet && moneySpend>=500){
-                    System.out.println("Транзакция успешна");
-                    myBankWallet=myBankWallet-moneySpend;
-                    System.out.println("А сколько вы хотите получить после возвращения экспедиции?");
-                    wannaReward=in.nextInt();
-                    for (int count=0;moneySpend>499;count++ ){
-                        moneySpend=moneySpend-500;
-                        String name = SMembersNames[rnd.nextInt(7-1)+1];
-                        mySquad.add(new Creature(name, rnd.nextInt(100-1)+1, 1, rnd.nextInt(100-1)+1) );
-                    }
+                int wannaReward =0;
+                System.out.println("Сколько денег вы хотите вы хотите получить от экспедиции?");
+                wannaReward=in.nextInt();
+                if (checkExpeditionStatus(mySquad,myBankWallet,wannaReward)==true){
                     Thread expedition = new Thread(new Expedition(mySquad, wannaReward, myBankWallet,player), "ExpeditionThread");
                     expedition.start();
                     new SquadException(expedition, getNPE(mySquad));
                 }
-                key=0;
+                else {
+                    System.out.println("#загляни в банк и обращайся снова");
+                }
             }
             if(key==3){
                 Shop.getInto(player,myBankWallet);
@@ -155,14 +137,16 @@ public class Main {
             if (key==4){
                 myBankWallet=Bank.getInto(player, myBankWallet);//TODO переписать банк для работы с отрядом
             }
-            if (key==5){
-                gameSave(player, myBankWallet);
-                break;}
-            if (key==6)
-                FHW.letsGo();
-            if (key==7){
+            if (key==5) {
                 renameCfg();
-              player.setName(useCfg(player.getName()));
+                player.setName(useCfg(player.getName()));
+            }
+            if (key==6){
+                gameSave(player, myBankWallet);
+                break;
+            }
+            if (key==7){
+                FHW.letsGo();
             }
             }
         System.out.println("Спасибо за игру.");

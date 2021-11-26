@@ -10,6 +10,9 @@ import javax.transaction.xa.XAResource;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
+
+import static GamePlay.pac.GameLogic.SMembersNames;
 
 public class Expedition implements Runnable{
     private int reward;
@@ -23,6 +26,35 @@ public class Expedition implements Runnable{
         this.wallet=myBankWallet;
         this.wannaReward = wannaReward;
         this.player=player;
+    }
+
+    public static boolean checkExpeditionStatus(ArrayList<Creature>mySquad, int myBankWallet, int wannaReward){
+        Random rnd = new Random();
+        Scanner in = new Scanner(System.in);
+        int moneySpend;
+        System.out.println("Сколько вы хотите потратить на экипировку экспедиции? [Стоимость отряда не может быть" +
+                " меньше " +
+                "500 золотых] Сейчас в отряде находится " + mySquad.size() + " человек.");
+        if(myBankWallet<500 && mySquad.size()==0) {
+            System.out.println("Недостаточно средств в банке. \n[1] - выход.\n#никто не хочет ввязываться в авантюру за копейки.");
+        }
+        moneySpend= in.nextInt();
+        if (mySquad.size()>0&&moneySpend<500){
+            return true;
+        }
+        else {
+            if (moneySpend <= myBankWallet && moneySpend >= 500) {
+                System.out.println("Транзакция успешна");
+                myBankWallet = myBankWallet - moneySpend;
+                for (int count = 0; moneySpend > 499; count++) {
+                    moneySpend = moneySpend - 500;
+                    String name = SMembersNames[rnd.nextInt(7 - 1) + 1];
+                    mySquad.add(new Creature(name, rnd.nextInt(100 - 1) + 1, 1, rnd.nextInt(100 - 1) + 1));
+                }
+                return true;
+            }
+        }
+        return false;
     }
     @Override
     public void run() {
