@@ -86,7 +86,7 @@ public class FHW {
             List <Hero> gList= new ArrayList();
             gList = HwSquad.stream().sorted((o1, o2) -> o1.getMagicId() - o2.getMagicId()).collect(Collectors.toList());
             for (int count =0; count < gList.size(); count++){
-                System.out.println(gList.get(count).getName() + "Владеет: " + gList.get(count).getMagicName());
+                System.out.format( "%1s использует %1s \n",gList.get(count).getName(), gList.get(count).getMagicName());
             }
         }
 
