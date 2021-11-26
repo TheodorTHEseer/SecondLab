@@ -17,6 +17,7 @@ import java.util.*;
 import static FileMgmt.MgmtCfg.*;
 import static GamePlay.pac.Expedition.checkExpeditionStatus;
 import static GamePlay.pac.Expedition.getNPE;
+import static GamePlay.pac.Fight.heal;
 import static GamePlay.pac.GameLogic.gameMenuDisplay;
 
 public class Main {
@@ -72,22 +73,13 @@ public class Main {
                 Thread.sleep(1200);
             }
             //Цикл для комнаты
-            if (key==1) {//TODO разбить на методы
+            if (key==1) {//TODO разбить на методы, часть методов сдлеать приватными, засунуть в fight
                 GameLogic.generateEnemies(enemiesMass, enemies, xLenght, yLenght);
                 while (enemies.size() > 0) {
                     if (player.getHp() <= 0)
                         break; // Чтобы ливнуть из цикла при смерти гг
                     player.setDamage(GameLogic.calcDPS(player.Equipment, player.getDefaultDamage()));//Чтобы каждый ход отслеживать актульное оружие и дамаг
-                    if (player.getHp()<100 && player.Inventory.size()>0){
-                        int healKey=0;
-                        System.out.println("Вас ранили. Хотите использовать банку с зельем здоровья?\n" +
-                                "[1] - да\n" +
-                                "[2] - нет");
-                        healKey=in.nextInt();
-                        if(healKey==1){
-                            player.setHp(player.getHp()+player.Inventory.get(0).getHpBoost());
-                        }
-                    }
+                    heal(player);//Отхилить гг
                     System.out.println("Врагов осталось:" + enemies.size());
 
                     System.out.println("У вас " + player.getHp() + " Hp, а в руках вы держите: " +
@@ -148,7 +140,7 @@ public class Main {
             if (key==7){
                 FHW.letsGo();
             }
-            }
-        System.out.println("Спасибо за игру.");
         }
+        System.out.println("Спасибо за игру.");
     }
+}
