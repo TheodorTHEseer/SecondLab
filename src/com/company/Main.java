@@ -38,7 +38,7 @@ public class Main {
         Thread.sleep(1575);
         int yLenght = 3;//кол-во строк
         int xLenght = 3;//кол-во столбцов
-        int enemiesMass = 5;//Кол-во врагов
+        int enemiesMass = 2;//Кол-во врагов
         //Классы
         Random rnd = new Random();
         Field field = new Field(yLenght, xLenght);//Чтобы работать с картой
@@ -61,7 +61,7 @@ public class Main {
         GameLogic.startKit(player,mySword,xLenght,yLenght);
         int key =0;
         Shop.generateItems();
-        while (player.getHp()>0) {
+        while (player.getHp()>0) {//TODO переделать с case
             gameMenuDisplay();
             Scanner in = new Scanner(System.in);
             try {
@@ -72,7 +72,7 @@ public class Main {
                 Thread.sleep(1200);
             }
             //Цикл для комнаты
-            if (key==1) {
+            if (key==1) {//TODO разбить на методы
                 GameLogic.generateEnemies(enemiesMass, enemies, xLenght, yLenght);
                 while (enemies.size() > 0) {
                     if (player.getHp() <= 0)
