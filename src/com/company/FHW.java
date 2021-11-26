@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static cretures.pac.Hero.prefix;
-
+//welcome to the XP|-04EB0 ZONE
 public class FHW {
     static private ArrayList <Hero> HwSquad = new ArrayList<>();
 
