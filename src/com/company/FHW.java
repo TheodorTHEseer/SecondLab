@@ -20,7 +20,8 @@ public class FHW {
     }
     public static List <Hero> eList = new ArrayList<>();
     static public void letsGo() {
-        HwSquad.forEach(Hero -> System.out.printf("Name: %10s hp: %5d dmg: %5d \n",Hero.getName(), Hero.getMaxHp(), Hero.getDefaultDamage()));
+        HwSquad.forEach(Hero -> System.out.printf("Name: %10s hp: %5d dmg: %5d \n",
+                Hero.getName(), Hero.getMaxHp(), Hero.getDefaultDamage()));
             aN(HwSquad);
             bN(HwSquad);
             cN(HwSquad);
@@ -28,7 +29,6 @@ public class FHW {
             eN(HwSquad);
             fN(HwSquad);
             gN(HwSquad);
-
         }
         private static void aN(ArrayList <Hero> HwSquad){
             System.out.println("a: ");
@@ -47,7 +47,7 @@ public class FHW {
             HwSquad.stream()
                     .filter(Hero -> Hero.getDefaultDamage()<100)
                     .sorted((o1, o2) -> o1.getDefaultDamage() - o2.getDefaultDamage())
-                    .forEach(Hero-> System.out.printf("%10s dmg: %5d \n",Hero.getName(), + Hero.getDefaultDamage()));
+                    .forEach(Hero-> System.out.printf("Name: %10s dmg: %5d \n",Hero.getName(), + Hero.getDefaultDamage()));
         }
         private static void dN (ArrayList <Hero> HwSquad){
             System.out.println("d : #здесь будет пусто, так как у всех дамаг <100");
@@ -62,7 +62,7 @@ public class FHW {
                     .filter(Hero -> Hero.getMagicId() == 1)
                     .collect(Collectors.toList())) {
                 hero.setHp(hero.getHp() * 2);
-                System.out.printf("%10s hp: %5d \n",hero.getName(), hero.getHp());
+                System.out.printf("Name: %10s hp: %5d \n",hero.getName(), hero.getHp());
             }
         }
         private static void fN(ArrayList <Hero> HwSquad){
@@ -86,9 +86,8 @@ public class FHW {
             List <Hero> gList= new ArrayList();
             gList = HwSquad.stream().sorted((o1, o2) -> o1.getMagicId() - o2.getMagicId()).collect(Collectors.toList());
             for (int count =0; count < gList.size(); count++){
-                System.out.format( "%8s использует %6s \n",gList.get(count).getName(), gList.get(count).getMagicName());
+                System.out.format( "Name: %8s использует %6s \n",gList.get(count).getName(), gList.get(count).getMagicName());
             }
         }
-
     }
 
