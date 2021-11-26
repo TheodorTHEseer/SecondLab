@@ -4,7 +4,6 @@ import cretures.pac.Hero;
 import items.pac.Equipment;
 import items.pac.Weaponry;
 
-import javax.crypto.AEADBadTagException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -71,7 +70,7 @@ public class Shop {
             for (int count = 0; count < shopItems.size(); count++) {
                 System.out.println(count + ") " + shopItems.get(count).getName() + ": " +
                         shopItems.get(count).getHpBoost() + " - захилит, стоит: " + shopItems.get(count).getCost() +
-                        "золотых и требует " + shopItems.get(count).getRequiredLvl() + " уроень");
+                        " золотых и требует " + shopItems.get(count).getRequiredLvl() + " уровень");
             }
             System.out.println("Что берём?" +
                     " ["+shopItems.size() +"] - выход");
@@ -86,13 +85,12 @@ public class Shop {
                         && player.getLvl() >= shopItems.get(shopKey).getRequiredLvl()) {
                     player.Inventory.add(shopItems.get(shopKey));
                     myBankWallet = myBankWallet - shopItems.get(shopKey).getCost();
-                    System.out.println("Транзакция успешна.");//<<<
+                    System.out.println("Транзакция успешна.");
                 }
             }
             catch (IndexOutOfBoundsException e){
                 System.out.println("Прощайте");
             }
-
         }
     }
 }
