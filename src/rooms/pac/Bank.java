@@ -1,6 +1,5 @@
 package rooms.pac;
 
-import cretures.pac.Creature;
 import cretures.pac.Hero;
 
 import java.util.InputMismatchException;

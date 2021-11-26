@@ -33,14 +33,11 @@ public class MgmtCfg {
             System.out.println(exception.getMessage());
         }
     }
-
     public static void getIndex(int index){
         findex=index;
         patch = "config"+findex+".txt";
     }
-
     public static void renameCfg(){
-
         try {
             FileWriter fileWriter = new FileWriter(home + File.separator + "Desktop" + File.separator +
                     "testGameFolder"+File.separator+ "config0.txt" , false);
@@ -110,7 +107,6 @@ public class MgmtCfg {
                 String fLine = lines.get(count).replace(words[count], "");
                 flines.add(fLine);
             }
-
             player.getSave(flines);
             try {
                 int money = Integer.parseInt(flines.get(0));
