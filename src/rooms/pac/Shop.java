@@ -2,9 +2,11 @@ package rooms.pac;
 
 import cretures.pac.Hero;
 import items.pac.Equipment;
+import items.pac.Item;
 import items.pac.Weaponry;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -38,12 +40,11 @@ public class Shop {
         System.out.println("Что вы хотите купить? \n[1] - оружие. \n[2] - прочую экипировку. \n[3] - выход.");
         shopKey=in.nextInt();
         if (shopKey==1) {
-            for (int count = 0; count < shopWeapons.size(); count++) {
-                System.out.println(count + ") " + shopWeapons.get(count).getName() + ": " +
-                        shopWeapons.get(count).getWeaponDmg() + " - урона" + " ему нужен "
-                        + shopWeapons.get(count).getRequiredLvl() + " урвоень, " + "стоит он: "
-                        + shopWeapons.get(count).getCost());
-            }
+            shopWeapons.stream().sorted((item1, item2) -> item1.getCost()-item2.getCost()).
+                    forEach(Weaponry-> System.out.println("Name: "+Weaponry.getName() + ", dmg: "+
+                            Weaponry.getWeaponDmg() +", req lvl: "+
+                            Weaponry.getRequiredLvl()+ ", cost: " +
+                            Weaponry.getCost()));
             System.out.println("Что берём?\n ["+shopWeapons.size()+"] - выход");
             shopKey = in.nextInt();
             try{ //В действительности всё ограничено if
@@ -67,11 +68,11 @@ public class Shop {
         }
 
         if (shopKey == 2) {
-            for (int count = 0; count < shopItems.size(); count++) {
-                System.out.println(count + ") " + shopItems.get(count).getName() + ": " +
-                        shopItems.get(count).getHpBoost() + " - захилит, стоит: " + shopItems.get(count).getCost() +
-                        " золотых и требует " + shopItems.get(count).getRequiredLvl() + " уровень");
-            }
+            shopItems.stream().sorted((item1, item2) -> item1.getCost()-item2.getCost()).forEach(Item->
+                    System.out.println("Name: "+ Item.getName()+", heal "+
+                            Item.getHpBoost()+", req lvl: " +
+                            Item.getRequiredLvl()+", cost: "+
+                            Item.getCost()));
             System.out.println("Что берём?" +
                     " ["+shopItems.size() +"] - выход");
             shopKey = in.nextInt();
