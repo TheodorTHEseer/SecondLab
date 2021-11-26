@@ -132,6 +132,7 @@ public class Main {
             }
             if (key==7){
                 FHW.letsGo();
+                Thread.sleep(7000);
             }
         }
         System.out.println("Спасибо за игру.");
