@@ -62,7 +62,7 @@ public class FHW {
                     .filter(Hero -> Hero.getMagicId() == 1)
                     .collect(Collectors.toList())) {
                 hero.setHp(hero.getHp() * 2);
-                System.out.printf("%10s hp: %5d",hero.getName(), hero.getHp());
+                System.out.printf("%10s hp: %5d \n",hero.getName(), hero.getHp());
             }
         }
         private static void fN(ArrayList <Hero> HwSquad){
