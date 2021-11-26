@@ -25,6 +25,7 @@ public class FHW {
             bN(HwSquad);
             cN(HwSquad);
             dN(HwSquad);
+            eN(HwSquad);
             fN(HwSquad);
             gN(HwSquad);
 
