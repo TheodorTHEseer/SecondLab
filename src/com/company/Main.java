@@ -131,8 +131,7 @@ public class Main {
                 break;
             }
             if (key==7){
-                FHW.letsGo();
-                Thread.sleep(7000);
+                System.out.println("Ага угу ну всё");
             }
         }
         System.out.println("Спасибо за игру.");

@@ -2,14 +2,17 @@ package com.company;
 
 import cretures.pac.Hero;
 
-import javax.crypto.AEADBadTagException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static cretures.pac.Hero.prefix;
 //welcome to the XP|-04EB0 ZONE
 public class FHW {
+    public static void main(String[] args){
+        ArrayList <Hero> HwSquad = new ArrayList<>();
+        generate();
+        letsGo();
+    }
     static private ArrayList <Hero> HwSquad = new ArrayList<>();
 
     public static void generate() {
