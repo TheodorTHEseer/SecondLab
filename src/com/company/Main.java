@@ -131,7 +131,10 @@ public class Main {
                 break;
             }
             if (key==7){
-                System.out.println("Ага угу ну всё");
+                System.out.println("Ага угу ну всё.");
+                Thread.sleep(1337);
+                throw new NullPointerException("sli" +
+                        "to");
             }
         }
         System.out.println("Спасибо за игру.");
