@@ -11,11 +11,22 @@ import static FileMgmt.Color.cResetA;
 import static FileMgmt.Color.redA;
 import static FileMgmt.MgmtCfg.home;
 
-public class MgmtGeneral {
+public class MgmtGeneral implements Runnable{
     public static Date date = new Date();
     public static Map <Integer, String> logs = new HashMap<>();
 
-    public static void saveLogs(Map<Integer, String> logs){
+    public void run(){
+    saveLogs();
+        try {
+        Thread.sleep(5000);
+        }
+        catch (Exception e){
+        System.out.println("Ошибка запись логов! " + e.getMessage());
+        }
+    }
+
+
+    public static void saveLogs(){
         try{
             FileWriter fileWriter = new FileWriter(home + File.separator + "Desktop" + File.separator +
                     "testGameFolder"+File.separator+ "logs.txt" , false);
@@ -28,7 +39,7 @@ public class MgmtGeneral {
         }
         catch (IOException e)
         {
-            System.out.println(redA + "###Логи не сохранены###" + cResetA);
+            System.out.println(redA + "Логи не сохранены!" + cResetA + e.getMessage());
         }
     }
 }
