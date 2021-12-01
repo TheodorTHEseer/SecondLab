@@ -90,7 +90,7 @@ public class MgmtCfg {
             System.out.println(e.getMessage());
         }
     }
-    static public void loadGame(Hero player, int bankWallet){//TODO добавить json для сквада
+    static public void loadGame(Hero player, int bankWallet){
         String line = null;
         try {
             FileReader fileReader = new FileReader(home + File.separator + "Desktop" + File.separator +

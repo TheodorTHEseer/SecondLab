@@ -30,7 +30,7 @@ public class Enemy extends Creature{
         id=enemies.indexOf(this);
     }
 
-    public String getLine(){
+    private String getLine(){
         String line = this.getName()+","+ this.getHp()+","+ this.getDamage()+","+this.getDexteritySkill()+","+
                 this.getLvl()+","+this.xPos+","+this.yPos;
                 return line;
@@ -38,11 +38,16 @@ public class Enemy extends Creature{
     public void record(){
         try {
             FileWriter fileWriter = new FileWriter(home + File.separator + "Desktop" + File.separator +
-                    "testGameFolder" + File.separator + id+".txt");
+                    "testGameFolder" + File.separator + "enemy"+id+".txt", false);
+            fileWriter.write(getLine());
             logs.put(logs.size()+1,"Запись файла врага: "+id+"|Done");
+            fileWriter.close();
         }
         catch (Exception e){
             logs.put(logs.size()+1,"Запись файла врага: "+id+"|Fail" + e.getMessage());
         }
+    }
+    public void display(){
+        System.out.println(getLine());
     }
 }
