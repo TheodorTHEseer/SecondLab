@@ -6,9 +6,14 @@ import java.util.Scanner;
 import static Dialogs.LvlEnd.*;
 
 public class Test {
+     static Scanner in = new Scanner(System.in);
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
         loadDialogs();
+        endLvlTest();
+
+
+    }
+    private static void endLvlTest(){
         for (int count = 0; count<10; count++){
             System.out.println(getEndDialog(count));
             String answer;
@@ -17,8 +22,6 @@ public class Test {
                 System.out.println(getEndAfterY(count) + "Master");
             else
                 System.out.println(getEndAfterN(count));
-
         }
-        
     }
 }

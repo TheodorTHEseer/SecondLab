@@ -23,8 +23,8 @@ public class Start {
             confSubDirCreateSream.mkdir();
         }
         catch (Exception e){
-            logs.put(logs.size()+1,"Создание папка игры|Fail" + e.getMessage() );
+            logs.put(logs.size()+1,"Создание папки игры|Fail" + e.getMessage() );
         }
-        logs.put(logs.size()+1,"Создание папка игры|Done" );
+        logs.put(logs.size()+1,"Создание папки игры|Done" );
     }
 }
