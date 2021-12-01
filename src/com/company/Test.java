@@ -1,7 +1,6 @@
 package com.company;
 
 
-import java.util.Locale;
 import java.util.Scanner;
 
 import static Dialogs.LvlEnd.*;
@@ -14,7 +13,7 @@ public class Test {
             System.out.println(getEndDialog(count));
             String answer;
             answer=in.nextLine();
-            if (answer.toLowerCase(Locale.ROOT).equals(getEndTAns(count).toLowerCase(Locale.ROOT)))
+            if (answer.toLowerCase().equals(getEndTAns(count).toLowerCase()))
                 System.out.println(getEndAfterY(count) + "Master");
             else
                 System.out.println(getEndAfterN(count));

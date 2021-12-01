@@ -46,7 +46,6 @@ public class Main {
         String[] SMembersNames = {"Марис","Кас","Биттер","Олег","Дамир","Радис", "Кир","Ваард"};//Для членов отряда имена
         String MyMap[][] = new String[yLenght][xLenght];//карта для комнаты
         ArrayList<Creature> mySquad = new ArrayList<>();
-        ArrayList<Weaponry> myStorage = new ArrayList<>();//TODO добавить хранилище
         ArrayList<Enemy> enemies = new ArrayList<>();//Множество врагов
         ArrayList<Weaponry> shopWeapons = new ArrayList<>();//Оружие в магазине
         ArrayList<Equipment> shopItems = new ArrayList<>();//Всякие приколы в магазине
@@ -55,7 +54,7 @@ public class Main {
         GameLogic.startKit(player,mySword,xLenght,yLenght);
         int key =0;
         Shop.generateItems();
-        while (player.getHp()>0) {//TODO переделать с case
+        while (player.getHp()>0) {
             gameMenuDisplay();
             Scanner in = new Scanner(System.in);
             try {
@@ -120,7 +119,7 @@ public class Main {
                 Shop.getInto(player,myBankWallet);
             }
             if (key==4){
-                myBankWallet=Bank.getInto(player, myBankWallet);//TODO переписать банк для работы с отрядом
+                myBankWallet=Bank.getInto(player, myBankWallet);
             }
             if (key==5) {
                 renameCfg();

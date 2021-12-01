@@ -10,6 +10,6 @@ public class Equipment extends Item{
     public Equipment(String name, int requiredLvl){
         super(name, requiredLvl);
         setCost(requiredLvl*3* rnd.nextInt(100-1)+1);
-        this.hpBoost= requiredLvl+getCost()/25;//TODO проверить цены
+        this.hpBoost= requiredLvl+getCost()/25;
     }
 }
