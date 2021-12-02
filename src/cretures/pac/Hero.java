@@ -89,9 +89,9 @@ public class Hero extends Creature {
         flines.remove(0);
         return x;
     }
-    public static void getStartedSword(Hero player){
+    public void giveStartedSword(){
         Random rnd = new Random();
         Weaponry mySword = new Weaponry("Мой меч", 1, rnd.nextInt(50- 1)+1);
-        player.Equipment.add(mySword);
+        this.Equipment.add(mySword);
     }
 }

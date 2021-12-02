@@ -1,12 +1,12 @@
 package com.company;
 
+import Dungeon.MainEvent;
 import FileMgmt.Start;
 import GamePlay.pac.AllMobsController;
 import GamePlay.pac.Controller;
 import GamePlay.pac.GameLogic;
 import cretures.pac.Enemy;
 import cretures.pac.Hero;
-import items.pac.Weaponry;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 import static Dialogs.LvlEnd.*;
 import static Dungeon.Maps.*;
+import static Dungeon.Speaker.showMenu;
 import static FileMgmt.Color.*;
 import static FileMgmt.MgmtCfg.*;
 import static GamePlay.pac.Field.*;
@@ -26,10 +27,15 @@ public class Game {
     public static void main(String[] args) throws InterruptedException {
         loadInfo();
         loadDialogs();
+        boolean eventStatus=false;
         int bankWallet = 0;
         Hero player =checkSaves(bankWallet);
-        Weaponry mySword = new Weaponry("Мой меч", 1, rnd.nextInt(50- 1)+1);
-        player.Equipment.add(mySword);
+        player.giveStartedSword();
+        Thread MainEvent = new Thread(new MainEvent(eventStatus, player), "MainEventThread");
+        MainEvent.start();
+        showMenu(eventStatus);
+        int key = in.nextInt();
+
         for (int lvlValue = 0; lvlValue<10; lvlValue++){
             fightInRoom(lvlValue, player);
             Thread.sleep(1000);
@@ -51,7 +57,7 @@ public class Game {
         }
         else{
             loadGame(player, bankWallet);
-            System.out.println("С возвращением! " + player.getName());
+            System.out.println("С возвращением! \u001B[36m" + player.getName()+"\u001B[0m");
         }
         return player;
     }
