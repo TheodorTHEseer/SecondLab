@@ -1,14 +1,22 @@
 package com.company;
 
 
+import cretures.pac.Enemy;
+import cretures.pac.Hero;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static Dialogs.LvlEnd.*;
+import static Dungeon.Dungeon.generateEnemiesArray;
+import static Dungeon.Dungeon.generateLvl;
+import static Dungeon.Maps.*;
+import static GamePlay.pac.Field.customMap;
+import static GamePlay.pac.Field.displayMap;
 
 public class Test {
-     static Scanner in = new Scanner(System.in);
+    static Scanner in = new Scanner(System.in);
     public static void main(String[] args) {
-
 
 
     }
@@ -22,5 +30,22 @@ public class Test {
             else
                 System.out.println(getEndAfterN(count));
         }
+    }
+    private static void mapTest(){
+        for(int lvlCounter =0; lvlCounter<10;lvlCounter++){
+            String [][] map = generateLvl(lvlCounter);
+            System.out.println(lvlCounter);
+            displayMap(map, hexLvlY.get(lvlCounter), hexLvlX.get(lvlCounter));
+        }
+    }
+    private static void lvlTest(){
+        loadInfo();
+        Hero player = new Hero("@@@@");
+        player.xPos=0;
+        player.yPos=0;
+        String [][] map = generateLvl(8);
+        ArrayList <Enemy> enemies = generateEnemiesArray(8);
+        customMap(map,player,enemies);
+        displayMap(map, 8);
     }
 }

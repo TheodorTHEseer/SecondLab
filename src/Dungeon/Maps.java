@@ -7,11 +7,12 @@ public class Maps {
     public static Map<Integer, Integer> enemyLvl= new HashMap<>();
     public static Map <Integer, Integer> hexLvlY = new HashMap<>();
     public static Map <Integer, Integer> hexLvlX = new HashMap<>();
-    private static void loadInfo(){
+    public static void loadInfo(){
         hexLvlY.put(0,2);//6
         hexLvlY.put(1,2);//6
         hexLvlY.put(2,5);//10
         hexLvlY.put(3,3);//12
+        hexLvlY.put(4,3);//12
         hexLvlY.put(5,7);//14
         hexLvlY.put(6,4);//16
         hexLvlY.put(7,6);//24
@@ -22,6 +23,7 @@ public class Maps {
         hexLvlX.put(1,3);//6
         hexLvlX.put(2,2);//10
         hexLvlX.put(3,4);//12
+        hexLvlX.put(4,3);//12
         hexLvlX.put(5,2);//14
         hexLvlX.put(6,4);//16
         hexLvlX.put(7,4);//24

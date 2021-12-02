@@ -1,10 +1,8 @@
 package cretures.pac;
 
 import items.pac.Weaponry;
-import org.w3c.dom.ranges.RangeException;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Random;
 
 public class Hero extends Creature {
@@ -54,6 +52,8 @@ public class Hero extends Creature {
         this.stamina=100;
         this.staminaRefresh = rnd.nextInt(10);
         this.magicName=MagicNames[magicId];
+         holdspace = name.charAt(0);
+        this.shortName= "["+holdspace + "]";
     }
 
     char holdspace;
