@@ -19,9 +19,10 @@ public class Fight {
             }
         }
     }
-    public void StartFight (Hero player, Creature enemy){
+    public static void StartFight (Hero player, Creature enemy) throws InterruptedException {
         System.out.println("Вы встречаете " + enemy.getName() + " в его руках вы наблюдаете " + enemy.Equipment.get(0).getName()+
                 " один его удар способен нанести вам" + enemy.getDamage() + "///" + enemy.Equipment.get(0).getWeaponDmg());
+        Thread.sleep(675);
             if (player.getDexteritySkill() >= enemy.getDexteritySkill()){
                 System.out.println("Но вы оказываетесь ловким воином и бьёте врага первым нанося ему " + player.getDamage()
                 + " урона");

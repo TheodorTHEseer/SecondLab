@@ -35,7 +35,7 @@ public class LvlEnd {
     lvlEndAfterAnsY.put(0, "Ну и черт с тобой, шагай дальше, ");
     lvlEndAfterAnsY.put(1, "Может быть я и не хочу с тобой драться, я всё равно труп, иди своей дорогой, ");
     lvlEndAfterAnsY.put(2, "Заходи ещё, ");
-    lvlEndAfterAnsY.put(3, "Скажи этому братцу-придурку, что сказал мне, №");
+    lvlEndAfterAnsY.put(3, "Скажи этому братцу-придурку, что сказал мне, ");
     lvlEndAfterAnsY.put(4, "Ну и молодчина, хороший ответ, ");
     lvlEndAfterAnsY.put(5, "Щедро, господин ");
     lvlEndAfterAnsY.put(6, "Эхэхххэ, ну да, правильно, ");

@@ -28,9 +28,9 @@ public class Field {
         map[player.yPos][player.xPos]=player.shortName;
     }
     public static void customMap (String[][]map, Creature player, ArrayList <Enemy> enemies){
-        map[player.yPos][player.xPos]=player.shortName;
-        for(int count = 0; count<enemies.size(); count ++){
-            map[enemies.get(count).yPos][enemies.get(count).xPos]=enemies.get(count).shortName;
+            map[player.yPos][player.xPos]=player.shortName;
+            for(int count = 0; count<enemies.size(); count ++){
+                map[enemies.get(count).yPos][enemies.get(count).xPos]=enemies.get(count).shortName;
         }
     }
 
