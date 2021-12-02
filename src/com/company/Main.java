@@ -5,14 +5,15 @@ import GamePlay.pac.*;
 import cretures.pac.Creature;
 import cretures.pac.Enemy;
 import cretures.pac.Hero;
-import items.pac.Equipment;
 import items.pac.Weaponry;
 import rooms.pac.Bank;
 import rooms.pac.Shop;
-import GamePlay.pac.SquadException;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Random;
+import java.util.Scanner;
 
 import static FileMgmt.MgmtCfg.*;
 import static GamePlay.pac.Expedition.checkExpeditionStatus;
@@ -25,7 +26,6 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         Hero player = new Hero("My Hero", 100, 100, 1000, 1, 1000); //Даже если сейв умер, то персонаж будет создан
         int myBankWallet=100;//Деньги на банковском счете по дефолту
-        int playerIndex;
         if (Start.uploadCheck()==false) {
             Start.upload();
             createCfg();
@@ -47,8 +47,6 @@ public class Main {
         String MyMap[][] = new String[yLenght][xLenght];//карта для комнаты
         ArrayList<Creature> mySquad = new ArrayList<>();
         ArrayList<Enemy> enemies = new ArrayList<>();//Множество врагов
-        ArrayList<Weaponry> shopWeapons = new ArrayList<>();//Оружие в магазине
-        ArrayList<Equipment> shopItems = new ArrayList<>();//Всякие приколы в магазине
         Weaponry mySword = new Weaponry("Мой меч", 1, rnd.nextInt(50- 1)+1);
         FHW.generate();
         GameLogic.startKit(player,mySword,xLenght,yLenght);
@@ -126,7 +124,7 @@ public class Main {
                 player.setName(useCfg(player.getName()));
             }
             if (key==6){
-                gameSave(player, myBankWallet);
+                saveGame(player, myBankWallet);
                 break;
             }
             if (key==7){

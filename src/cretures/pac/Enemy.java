@@ -1,8 +1,11 @@
 package cretures.pac;
 
+import items.pac.Weaponry;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static FileMgmt.MgmtCfg.home;
 import static FileMgmt.MgmtGeneral.logs;
@@ -46,6 +49,11 @@ public class Enemy extends Creature{
         catch (Exception e){
             logs.put(logs.size()+1,"Запись файла врага: "+id+"|Fail" + e.getMessage());
         }
+    }
+    public void addWeapon(){
+        Random rnd = new Random();
+        Weaponry mySword = new Weaponry("Месть архонта", 1, rnd.nextInt(50- 1)+1);
+       this.Equipment.add(mySword);
     }
     public void display(){
         System.out.println(getLine());

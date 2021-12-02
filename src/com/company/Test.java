@@ -18,7 +18,6 @@ public class Test {
     static Scanner in = new Scanner(System.in);
     public static void main(String[] args) {
 
-
     }
     private static void endLvlTest(){
         for (int count = 0; count<10; count++){
@@ -40,7 +39,7 @@ public class Test {
     }
     private static void lvlTest(){
         loadInfo();
-        Hero player = new Hero("@@@@");
+        Hero player = new Hero("Gay Lord");
         player.xPos=0;
         player.yPos=0;
         String [][] map = generateLvl(8);

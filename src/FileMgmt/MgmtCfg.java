@@ -6,6 +6,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static FileMgmt.MgmtGeneral.logs;
+
 public class MgmtCfg {
     static Scanner in = new Scanner(System.in);
     public static String home = System.getProperty("user.home");
@@ -66,7 +68,7 @@ public class MgmtCfg {
         return playerName;
     }
 
-    public static void gameSave(Hero player, int bankWallet){
+    public static void saveGame(Hero player, int bankWallet){
         try{
         FileWriter fileWriter = new FileWriter (home + File.separator + "Desktop" + File.separator +
                 "testGameFolder"+File.separator+ "config1.txt" , false);
@@ -85,6 +87,19 @@ public class MgmtCfg {
             fileWriter.write("BankMoney: " + bankWallet +
                     "\n");
             fileWriter.close();
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    public static void saveGame (Hero player, int bankWallet, int currentLvl){
+        saveGame(player, bankWallet);
+        try {
+            FileWriter fileWriter = new FileWriter (home + File.separator + "Desktop" + File.separator +
+                    "testGameFolder"+File.separator+ "lvl.txt" , false);
+            fileWriter.write(currentLvl);
+            fileWriter.close();
+            logs.put(logs.size()+1, "Уровень сохранён успешно");
         }
         catch (Exception e){
             System.out.println(e.getMessage());

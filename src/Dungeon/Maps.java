@@ -38,7 +38,7 @@ public class Maps {
         enemyLvl.put(5,8);
         enemyLvl.put(6,9);
         enemyLvl.put(7,12);
-        enemyLvl.put(8,16);
+        enemyLvl.put(8,15);
         enemyLvl.put(9,4);//extra
     }
 }
