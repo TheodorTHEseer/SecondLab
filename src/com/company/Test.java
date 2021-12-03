@@ -1,7 +1,6 @@
 package com.company;
 
 
-import Settlement.Buildings.Market;
 import Settlement.Settlement;
 import cretures.pac.Enemy;
 import cretures.pac.Hero;
@@ -20,15 +19,36 @@ public class Test {
     static Scanner in = new Scanner(System.in);
     public static void main(String[] args) {
         int bankWallet =10000000;
-        Market market = new Market();
-        market.display();
         Settlement settlement = new Settlement();
-        settlement.getSettlement();
+        settlement.displayEnterMomlog();
+        while (bankWallet>0) {
+            Thread setl = new Thread(settlement, "Settlement");
+            setl.start();
+            settlement.getSettlement();
+            settlement.displayMenu();
+            int key = in.nextInt();
+            if (key == 1) {
+                System.out.println("Сколько денег вы хотите вложить?");
+                int value = in.nextInt();
+                if (value <= bankWallet)
+                    settlement.investMoney(value);
+            }
+            if (key == 2) {
+                settlement.displaySettlement();
+                settlement.shopNewBuilding(bankWallet);
+            }
+            if (key == 3)
+                settlement.getBackMoney(bankWallet);
+            if (key == 4)
+                settlement.displaySettlement();
+
+
+        }
+       /* settlement.getSettlement();
         settlement.displaySettlement();
         settlement.shopNewBuilding(bankWallet);
         settlement.displaySettlement();
-        Thread setl = new Thread(settlement, "Settlement");
-        setl.start();
+        */
         //settlement.getInfoAboutBuildings();
     }
     private static void endLvlTest(){
