@@ -1,6 +1,8 @@
 package com.company;
 
 
+import Settlement.Buildings.Market;
+import Settlement.Settlement;
 import cretures.pac.Enemy;
 import cretures.pac.Hero;
 
@@ -17,7 +19,10 @@ import static GamePlay.pac.Field.displayMap;
 public class Test {
     static Scanner in = new Scanner(System.in);
     public static void main(String[] args) {
-
+        Market market = new Market();
+        market.display();
+        Settlement settlement = new Settlement();
+        settlement.displaySettlement();
     }
     private static void endLvlTest(){
         for (int count = 0; count<10; count++){

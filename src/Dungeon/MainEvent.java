@@ -17,6 +17,7 @@ public class MainEvent implements Runnable{
             Thread.sleep(60000);
             eventStatus=true;
             System.out.println("\u001B[36m"+player.getName()+"\u001B[31m: что-то мне плоховато!\u001B[0m");
+            Thread.sleep(1500);
             boolean status = true;
             showMenu(status);
         } catch (InterruptedException e) {
