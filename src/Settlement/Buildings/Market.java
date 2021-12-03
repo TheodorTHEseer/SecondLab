@@ -6,10 +6,4 @@ public class Market extends Building{
         cost = 4500;
         yield = 100;
     }
-    public void buyMarket(int bankWallet){
-        bankWallet=bankWallet-cost;
-    }
-    public void display(){
-        System.out.println(name);
-    }
 }

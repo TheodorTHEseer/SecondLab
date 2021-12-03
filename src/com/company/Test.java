@@ -19,9 +19,13 @@ import static GamePlay.pac.Field.displayMap;
 public class Test {
     static Scanner in = new Scanner(System.in);
     public static void main(String[] args) {
+        int bankWallet =10000000;
         Market market = new Market();
         market.display();
         Settlement settlement = new Settlement();
+        settlement.getSettlement();
+        settlement.displaySettlement();
+        settlement.shopNewBuilding(bankWallet);
         settlement.displaySettlement();
     }
     private static void endLvlTest(){

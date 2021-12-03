@@ -7,4 +7,10 @@ public class Building {
     public String getName (){
         return name;
     }
+    public void display(){
+        System.out.println(name);
+    }
+    public int getCost(){
+        return this.cost;
+    }
 }
