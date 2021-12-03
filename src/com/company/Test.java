@@ -27,6 +27,7 @@ public class Test {
         settlement.displaySettlement();
         settlement.shopNewBuilding(bankWallet);
         settlement.displaySettlement();
+        settlement.getInfoAboutBuildings();
     }
     private static void endLvlTest(){
         for (int count = 0; count<10; count++){
