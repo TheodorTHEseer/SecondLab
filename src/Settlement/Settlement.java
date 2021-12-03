@@ -6,12 +6,16 @@ import java.util.Scanner;
 
 import static FileMgmt.Color.*;
 
-public class Settlement {
+public class Settlement implements Runnable{
     Scanner in = new Scanner(System.in);
     private int xL=8;
     private int yL=14;
-    public Settlement (){
+    private int moneyValue;
+    public void gainMoney(int money){
+        moneyValue=moneyValue+money;
+    }
 
+    public Settlement (){
     }
     public Building[][] SettlementMap = new Building[xL][yL];
     public void displaySettlement(){
@@ -89,5 +93,35 @@ public class Settlement {
         mine.getInfo();
         townHall.getInfo();
         System.out.printf(townHall.getName() + blueA +": пополняет население вашего поселения! На " + townHall.getLaborersValue() + " в минуту!\n"+ cResetA);
+    }
+    private int countBuildings(String name){
+        int count= 0;
+        for (int count0=0; count0<xL; count0++){
+            for (int count1=0; count1<yL; count1++){
+               if( SettlementMap[count0][count1].getName().equals(name))
+                   count=+1;
+            }
+        }
+        return count;
+    }
+    private int countYield(){
+        int yield;
+        yield = countBuildings("[\u001B[36mMine\u001B[0m]")*55+countBuildings("[\u001B[36mMark\u001B[0m]")*100;
+        return yield;
+    }
+    private int countCosts(){
+        int costs;
+        costs = countBuildings("[\u001B[36mMine\u001B[0m]")*20+countBuildings("[\u001B[36mMark\u001B[0m]")*10+countBuildings("[\u001B[36mHall\u001B[0m]")*50;
+        return costs;
+    }
+
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(6000);
+            System.out.println("Вы получили"+(countYield()-countCosts()));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

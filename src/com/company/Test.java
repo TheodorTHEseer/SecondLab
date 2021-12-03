@@ -27,6 +27,8 @@ public class Test {
         settlement.displaySettlement();
         settlement.shopNewBuilding(bankWallet);
         settlement.displaySettlement();
+        Thread setl = new Thread(settlement, "Settlement");
+        setl.start();
         //settlement.getInfoAboutBuildings();
     }
     private static void endLvlTest(){
