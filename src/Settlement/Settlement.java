@@ -38,11 +38,11 @@ public class Settlement {
     }
 
     public Building buyBuilding(int bankWallet){
-        System.out.println("Что вы хотите купить" +
+        System.out.println("Что вы хотите купить?" +
                 "\n [1] - Торговую площадь." +
                 "\n [2] - Шахту." +
-                "\n [3] - Ратушу." +
-                "");
+                "\n [3] - Ратушу.\n" +
+                " [4] - Я ничего не хочу покупать, хочу посмотреть информацию о зданиях.");
         Building building = new Building();
         int key = in.nextInt();
         Market market = new Market();
@@ -60,9 +60,16 @@ public class Settlement {
             bankWallet = bankWallet - townHall.getCost();
             building = townHall;
         }
+        if (key==4){
+            getInfoAboutBuildings();
+            System.out.println("Так что вы возьмёте?");
+            building=new Locked();
+        }
         return building;
     }
     public Building[][]addBuilding ( Building building){
+        if (building.getName().equals(new Locked().getName()))
+            return SettlementMap;
         System.out.println("Введите x координату");
         int xC = in.nextInt();
         System.out.println("Введите y координату");
@@ -81,6 +88,6 @@ public class Settlement {
         market.getInfo();
         mine.getInfo();
         townHall.getInfo();
-        System.out.printf(townHall.getName() + blueA +": пополняет население вашего поселения! На " + townHall.getLaborersValue() + " в минуту!"+ cResetA);
+        System.out.printf(townHall.getName() + blueA +": пополняет население вашего поселения! На " + townHall.getLaborersValue() + " в минуту!\n"+ cResetA);
     }
 }
