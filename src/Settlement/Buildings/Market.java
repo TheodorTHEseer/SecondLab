@@ -6,6 +6,6 @@ public class Market extends Building{
         cost = 6500;
         yield = 90;
         spends = 10;
-        laborerSpends = 1;
+        laborerSpends = 2;
     }
 }

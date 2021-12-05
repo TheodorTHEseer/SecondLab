@@ -6,6 +6,6 @@ public class Mine extends Building{
         cost = 2300;
         yield = 65;
         spends = 20;
-        laborerSpends = 2;
+        laborerSpends = 1;
     }
 }

@@ -22,6 +22,7 @@ public class Test {
         Settlement settlement = new Settlement();
         settlement.displayEnterMomlog();
         settlement.getSettlement();
+        settlement.download();
         Thread setl = new Thread(settlement, "Settlement");
         setl.start();
         while (bankWallet>0) {

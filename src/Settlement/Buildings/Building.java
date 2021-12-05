@@ -4,7 +4,17 @@ public class Building {
     public int getLaborerSpends() {
         return laborerSpends;
     }
+
+    public int getxCord() {
+        return xCord;
+    }
+
     private int xCord;
+
+    public int getyCord() {
+        return yCord;
+    }
+
     private int yCord;
     protected int laborerSpends;
     protected String name;
