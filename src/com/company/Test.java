@@ -21,10 +21,10 @@ public class Test {
         int bankWallet =10000000;
         Settlement settlement = new Settlement();
         settlement.displayEnterMomlog();
+        settlement.getSettlement();
+        Thread setl = new Thread(settlement, "Settlement");
+        setl.start();
         while (bankWallet>0) {
-            Thread setl = new Thread(settlement, "Settlement");
-            setl.start();
-            settlement.getSettlement();
             settlement.displayMenu();
             int key = in.nextInt();
             if (key == 1) {

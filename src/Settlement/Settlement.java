@@ -11,12 +11,15 @@ public class Settlement implements Runnable{
     private int xL=8;
     private int yL=14;
     private int moneyValue;
+    private void displayMoney(){
+        System.out.println("В казне " + moneyValue + " золотых!");
+    }
     public void gainMoney(int money){
         moneyValue=moneyValue+money;
     }
     public void investMoney(int mMoney){ //TODO добавить инвестиции
         if (mMoney>0)
-            moneyValue=moneyValue+mMoney;
+            gainMoney(mMoney);
     }
     public int getBackMoney(int mMoney){//TODO добавить вывод денег
         System.out.println("Сколько хотите забрать?");
@@ -34,15 +37,23 @@ public class Settlement implements Runnable{
     }
     public Building[][] SettlementMap = new Building[xL][yL];
     public void displayEnterMomlog(){
-        System.out.printf("\u001B[36mПривратник\u001B[0m: Добро пожаловать на ваши замли, милорд!n" +
-                "В казне сейчас лежит" + moneyValue + "золотых.\n");
+        System.out.printf("\u001B[36mПривратник\u001B[0m: Добро пожаловать на ваши замли, милорд!\n");
     }
     public void displayMenu(){
         System.out.printf(" [1] - Инвестировать в посление.\n" +
                 " [2] - Приступить к строительству. \n" +
                 " [3] - Забрать казну. \n" +
                 " [4] - Посмотреть карту. \n" +
-                " [5] - Выйти.");
+                " [5] - Выйти.\n");
+        displayMoney();
+        displayDef();
+    }
+    private void displayDef(){
+        int def = laborersP() - laborersM();
+        if (def<0)
+            System.out.println("В послении не хватает " +(def*(-1))+ " рабочих.");
+        if (def>0)
+            System.out.println("В поселении свободны от работы " +def+ " рабочих.");
     }
     public void displaySettlement(){
         System.out.printf("\u001B[32mx\\y%6s%6s%6s%6s%6s%6s%6s%6s%6s%6s%6s%6s%6s%6s\u001B[0m\n",
@@ -64,6 +75,7 @@ public class Settlement implements Runnable{
         return SettlementMap;
     }
     public void shopNewBuilding(int bankWallet){
+        displayMoney();
         addBuilding(buyBuilding(bankWallet));
     }
 
@@ -160,17 +172,18 @@ public class Settlement implements Runnable{
         int count=0;
         for (int count0=0; count0<xL; count0++){
             for (int count1=0; count1<yL; count1++){
-                if(SettlementMap[count0][count1].getName().equals("[\u001B[36mHall\u001B[0m]") == true)
-                    count=count+1;
+                if(SettlementMap[count0][count1].getName().equals("[\u001B[36mHall\u001B[0m]") == true){
+                    count=count+1;}
             }
         }
-        return count;
+        return count*3;
     }
 
     private int getFine(){
         int fine =0;
         if (laborersM()>laborersP()){
-            int def = laborersM()-laborersP();
+            int def = laborersP()-laborersM();
+            def = def*(-1);
             if (def>=5&&def<10){
                 fine = def*100;
                 System.out.println("В посленении \u001B[31mне хватает людей: " + def + cResetA);
@@ -183,6 +196,7 @@ public class Settlement implements Runnable{
                 fine = def*200;
                 System.out.println("Милорд, люди исчезли, осталось только: " + def);
             }
+            System.out.println("Прибыль снижена!");
         }
         return fine;
     }
@@ -191,8 +205,12 @@ public class Settlement implements Runnable{
         for (int count=1; count>0; count++) {
             try {
                 Thread.sleep(60000);
-                System.out.println("Казна поселения получила " + (countYield() - countCosts()));
+                if ((countYield()-countCosts()>=0))
+                    System.out.println("Казна поселения получила " + (countYield() - countCosts())+ " золотых!");
+                if ((countYield()-countCosts()<0))
+                    System.out.println("Казна ничего нен получила, тольео потртила " + (countYield() - countCosts()) + " золотых!");
                 gainMoney(countYield() - countCosts() - getFine());
+                displayMenu();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
