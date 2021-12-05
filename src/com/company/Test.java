@@ -36,21 +36,15 @@ public class Test {
                     settlement.investMoney(value);
             }
             if (key == 2) {
-                settlement.displaySettlement();
                 settlement.shopNewBuilding(bankWallet);
             }
             if (key == 3)
                 settlement.getBackMoney(bankWallet);
             if (key == 4)
                 settlement.displaySettlement();
+            if (key == 5)
+                break;
         }
-
-       /* settlement.getSettlement();
-        settlement.displaySettlement();
-        settlement.shopNewBuilding(bankWallet);
-        settlement.displaySettlement();
-        */
-        //settlement.getInfoAboutBuildings();
     }
     private static void endLvlTest(){
         for (int count = 0; count<10; count++){

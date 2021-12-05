@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 import static Dialogs.LvlEnd.*;
+import static Dungeon.MainEvent.returnStatuses;
 import static Dungeon.Maps.*;
 import static Dungeon.Speaker.showMenu;
 import static FileMgmt.Color.*;
@@ -33,10 +34,11 @@ public class Game {
         player.giveStartedSword();
         Thread MainEvent = new Thread(new MainEvent(eventStatus, player), "MainEventThread");
         MainEvent.start();
-        showMenu(eventStatus);
-        int key = in.nextInt();
+        showMenu(returnStatuses());
 
-        for (int lvlValue = 0; lvlValue<10; lvlValue++){
+        Thread.sleep(6000);
+        showMenu(returnStatuses());
+       for (int lvlValue = 0; lvlValue<10; lvlValue++){
             fightInRoom(lvlValue, player);
             Thread.sleep(1000);
             if (player.getHp()<=0)
@@ -44,6 +46,8 @@ public class Game {
             endLvlDialog(player, lvlValue);
         }
     }
+
+
     private static int giveMoney(){
         int bankWallet=0;
         return bankWallet;

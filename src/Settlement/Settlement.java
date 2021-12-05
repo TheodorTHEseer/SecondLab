@@ -102,6 +102,7 @@ public class Settlement implements Runnable{
         return SettlementMap;
     }
     public void shopNewBuilding(int bankWallet){
+        displaySettlement();
         displayMoney();
         addBuilding(buyBuilding(bankWallet));
     }
