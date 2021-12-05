@@ -31,7 +31,6 @@ public class GameLogic {
             int firstPt = rnd.nextInt(4);
             int secondPt = rnd.nextInt(4);
             String tag = Tags[0][firstPt] + " " + Tags[1][secondPt];
-            //Добавление нового в список
             enemyWeapons.add(new Weaponry(tag, rnd.nextInt(3-1)+1, rnd.nextInt(55 - 1) + 1));
         }
         for (int count = 0; count < enemiesMass; count++) {

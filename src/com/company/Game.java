@@ -1,12 +1,15 @@
 package com.company;
 
 import Dungeon.MainEvent;
+import FileMgmt.MgmtGeneral;
 import FileMgmt.Start;
-import GamePlay.pac.AllMobsController;
-import GamePlay.pac.Controller;
-import GamePlay.pac.GameLogic;
+import GamePlay.pac.*;
+import Settlement.Settlement;
+import cretures.pac.Creature;
 import cretures.pac.Enemy;
 import cretures.pac.Hero;
+import rooms.pac.Bank;
+import rooms.pac.Shop;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -18,6 +21,8 @@ import static Dungeon.Maps.*;
 import static Dungeon.Speaker.showMenu;
 import static FileMgmt.Color.*;
 import static FileMgmt.MgmtCfg.*;
+import static GamePlay.pac.Expedition.checkExpeditionStatus;
+import static GamePlay.pac.Expedition.getNPE;
 import static GamePlay.pac.Field.*;
 import static GamePlay.pac.Fight.StartFight;
 import static GamePlay.pac.Fight.heal;
@@ -26,33 +31,103 @@ public class Game {
     static Scanner in = new Scanner(System.in);
     static Random rnd = new Random();
     public static void main(String[] args) throws InterruptedException {
+        Thread logsThread = new Thread(new MgmtGeneral(),"LogsThread");
+        logsThread.start();
         loadInfo();
         loadDialogs();
-        boolean eventStatus=false;
+        int myBankWallet = 0;
+        boolean eventStatus = false;
         int bankWallet = 0;
-        Hero player =checkSaves(bankWallet);
+        int currentLvl = 0;
+        Hero player = loadSaves(bankWallet);
         player.giveStartedSword();
+        ArrayList<Creature> mySquad = new ArrayList<>();
         Thread MainEvent = new Thread(new MainEvent(eventStatus, player), "MainEventThread");
         MainEvent.start();
-        showMenu(returnStatuses());
-
-        Thread.sleep(6000);
-        showMenu(returnStatuses());
-       for (int lvlValue = 0; lvlValue<10; lvlValue++){
-            fightInRoom(lvlValue, player);
-            Thread.sleep(1000);
-            if (player.getHp()<=0)
+        while (player.getHp() > 0) {
+            showMenu(returnStatuses());
+            int key = in.nextInt();
+            if (key == 1)
+                fightInRoom(player);
+            if (key == 2) {
+                int wannaReward = 0;
+                System.out.println("Сколько денег вы хотите вы хотите получить от экспедиции?");
+                wannaReward = in.nextInt();
+                if (checkExpeditionStatus(mySquad, myBankWallet, wannaReward) == true) {
+                    Thread expedition = new Thread(new Expedition(mySquad, wannaReward, myBankWallet, player), "ExpeditionThread");
+                    expedition.start();
+                    new SquadException(expedition, getNPE(mySquad));
+                } else {
+                    System.out.println("#загляни в банк и обращайся снова");
+                }
+            }
+            if (key == 3) {
+                Shop.getInto(player, myBankWallet);
+            }
+            if (key == 4) {
+                myBankWallet = Bank.getInto(player, myBankWallet);
+            }
+            if (key == 5) {
+                renameCfg();
+                player.setName(useCfg(player.getName()));
+            }
+            if (key == 6) {
+                saveGame(player, myBankWallet, currentLvl);
                 break;
-            endLvlDialog(player, lvlValue);
+            }
+            if (key == 7 && returnStatuses() == true) {
+                Thread.sleep(6000);
+                showMenu(returnStatuses());
+                for (int lvlValue = 0; lvlValue < 10; lvlValue++) {
+                    if (currentLvl >= lvlValue) {
+                        lvlValue=currentLvl;
+                        fightInRoom(lvlValue, player);
+                        Thread.sleep(1000);
+                        if (player.getHp() <= 0)
+                            break;
+                        endLvlDialog(player, lvlValue);
+                        currentLvl++;
+                    }
+                    else {
+                        fightInRoom(lvlValue, player);
+                        Thread.sleep(1000);
+                        if (player.getHp() <= 0)
+                            break;
+                        endLvlDialog(player, lvlValue);
+                        currentLvl++;
+                    }
+                }
+            }
+            if (key == 8 && returnStatuses() == true) {
+                Settlement settlement = new Settlement();
+                settlement.displayEnterMomlog();
+                settlement.getSettlement();
+                settlement.download();
+                Thread setl = new Thread(settlement, "Settlement");
+                setl.start();
+                int keyS = in.nextInt();
+                while (keyS != 5) {
+                    settlement.displayMenu();
+                    settlement.upload();
+                    if (keyS == 1) {
+                        System.out.println("Сколько денег вы хотите вложить?");
+                        int value = in.nextInt();
+                        if (value <= bankWallet)
+                            settlement.investMoney(value);
+                    }
+                    if (keyS == 2) {
+                        settlement.shopNewBuilding(bankWallet);
+                    }
+                    if (keyS == 3)
+                        settlement.getBackMoney(bankWallet);
+                    if (keyS == 4)
+                        settlement.displaySettlement();
+                }
+            }
         }
     }
 
-
-    private static int giveMoney(){
-        int bankWallet=0;
-        return bankWallet;
-    }
-    private static Hero checkSaves(int bankWallet){
+    private static Hero loadSaves(int bankWallet){
         Hero player = new Hero("My Hero", 100, 100, 1000, 1, 1000);
         if (Start.uploadCheck()==false) {
             Start.upload();
@@ -76,6 +151,81 @@ public class Game {
             }
         }
         return map;
+    }
+    private static void fightInRoom(Hero player) throws InterruptedException {
+        ArrayList<Enemy> enemies = new ArrayList<>();
+        int enemiesMass = 4; //Кол-во врагов
+        int yLenght =8;
+        int xLenght =8;
+        String MyMap[][] = new String[yLenght][xLenght];
+        Field field = new Field(yLenght, xLenght);
+        Fight fight = new Fight();
+        GameLogic.generateEnemies(enemiesMass, enemies, xLenght, yLenght);
+        while (enemies.size() > 0) {
+            if (player.getHp() <= 0)
+                break; // Чтобы ливнуть из цикла при смерти гг
+            player.setDamage(GameLogic.calcDPS(player.Equipment, player.getDefaultDamage()));//Чтобы каждый ход отслеживать актульное оружие и дамаг
+            heal(player);//Отхилить гг
+            System.out.println("Врагов осталось:" + enemies.size());
+
+            System.out.println("У вас " + player.getHp() + " Hp, а в руках вы держите: " +
+                    player.Equipment.get(0).getName() +
+                    ", один его удар наносит " + player.Equipment.get(0).getWeaponDmg()
+                    + " урона");
+            field.defaultMap(MyMap);
+            //Потоки
+            Thread Controller = new Thread(new Controller(player, yLenght, xLenght), "PlayerThread");
+            Controller.start();
+            Thread AllMobsController = new Thread(new AllMobsController(enemies, yLenght, xLenght), "MobsThread");
+            AllMobsController.start();
+
+            field.customMap(MyMap, player, enemies);//Для того, чтобы карта обновилась до актуальной
+            if (field.fightStatusCheck(player, enemies) == true) {//Если на клетке гг стоит враг, то начинается файт
+                fight.StartFight(player, enemies.get(field.fightStatusEnemyIndex(player, enemies)));
+                Thread.sleep(5300);
+            }
+            field.checkAliveStatus(enemies);//Проверяем кто жив
+            //Отрисовка карты
+            field.displayMap(MyMap, yLenght, xLenght);
+            Thread.sleep(1000);
+            System.out.println("\n\n");
+        }
+        //Врагов нет, а вы живы
+        if (player.getHp() > 0) {
+            System.out.println(greenA + "Поздравляю с победой"+ cResetA);
+            Thread.sleep(3000);
+        }
+    }
+    private static void fightInRoom(ArrayList <Enemy> enemies, Hero player, int lvlValue) throws InterruptedException {
+        String [][] map = new String[hexLvlY.get(lvlValue)][hexLvlX.get(lvlValue)];
+        GameLogic.generateEnemies(enemyLvl.get(lvlValue), enemies, hexLvlX.get(lvlValue), hexLvlY.get(lvlValue));
+        player.xPos=0;
+        player.yPos=0;
+        while (enemies.size() > 0) {
+            if (player.getHp() <= 0)
+                break;
+            player.setDamage(GameLogic.calcDPS(player.Equipment, player.getDefaultDamage()));
+            heal(player);
+            defaulMap(map, lvlValue, "[ ]");
+            System.out.printf("Вы сейчас в %2d комнате c %2d врагами и у Вас %3d hp!\n", lvlValue, enemies.size(),player.getHp());
+            customMap(map,player,enemies);
+            Thread Controller = new Thread(new Controller(player, hexLvlY.get(lvlValue), hexLvlX.get(lvlValue)), "PlayerThread");
+            Controller.start();
+            Thread AllMobsController = new Thread(new AllMobsController(enemies, hexLvlY.get(lvlValue), hexLvlX.get(lvlValue)), "MobsThread");
+            AllMobsController.start();
+            if (fightStatusCheck(player, enemies) == true) {//Если на клетке гг стоит враг, то начинается файт
+                StartFight(player, enemies.get(fightStatusEnemyIndex(player, enemies)));
+            }
+            checkAliveStatus(enemies);//Проверяем кто жив
+            displayMap(map, lvlValue);
+            Thread.sleep(200);
+            System.out.println("\n\n");
+        }
+        //Врагов нет, а вы живы
+        if (player.getHp() > 0) {
+            System.out.println(greenA + "Поздравляю с победой в "+lvlValue +" комнате!\n"+purpleA+"Вы видите босса."+ cResetA);
+            Thread.sleep(3000);
+        }
     }
     private static void fightInRoom(int lvlValue, Hero player) throws InterruptedException {
         ArrayList<Enemy> enemies = new ArrayList<>();

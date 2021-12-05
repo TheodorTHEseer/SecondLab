@@ -272,12 +272,10 @@ public class Settlement implements Runnable{
                     "testGameFolder" + File.separator + "SettlementBuildings.txt");
             Scanner scanner = new Scanner(fileReader);
                 try {
-                    String allBuilds = scanner.nextLine();
-                    String[] stringsBuilds = allBuilds.split(":");
+                    String[] stringsBuilds = scanner.nextLine().split(":");
                     logs.put(logs.size(), "Массив построек разбит!");
                     for (int count=0;count<stringsBuilds.length; count++){
-                        String paramsString = stringsBuilds[count];
-                        String [] paramsMas = paramsString.split(",");
+                        String [] paramsMas = stringsBuilds[count].split(",");
                         String name = String.valueOf(paramsMas[0]);
                         int xCord =Integer.parseInt(paramsMas[1]);
                         int yCord =Integer.parseInt(paramsMas[2]);

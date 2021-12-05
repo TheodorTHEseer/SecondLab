@@ -43,7 +43,6 @@ public class Main {
         Random rnd = new Random();
         Field field = new Field(yLenght, xLenght);//Чтобы работать с картой
         Fight fight = new Fight();
-        String[] SMembersNames = {"Марис","Кас","Биттер","Олег","Дамир","Радис", "Кир","Ваард"};//Для членов отряда имена
         String MyMap[][] = new String[yLenght][xLenght];//карта для комнаты
         ArrayList<Creature> mySquad = new ArrayList<>();
         ArrayList<Enemy> enemies = new ArrayList<>();//Множество врагов

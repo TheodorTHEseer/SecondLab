@@ -8,7 +8,7 @@ import java.io.FileReader;
 import static FileMgmt.MgmtCfg.home;
 
 public class EnemiesLoad {
-    public static Enemy loadEnemy(int count, int lvlValue) {
+    public static Enemy loadEnemy(int count) {
         Enemy _enemy = null;
         try {
             FileReader fileReader = new FileReader(home + File.separator + "Desktop" + File.separator +

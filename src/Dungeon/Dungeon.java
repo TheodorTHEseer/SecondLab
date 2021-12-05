@@ -12,8 +12,6 @@ import static GamePlay.pac.GameLogic.Names;
 import static GamePlay.pac.GameLogic.Tags;
 
 public class Dungeon {
-    private static Random rnd = new Random();
-    private static int lvlVals = 10;//для изменения количества уровней
 
     public static String[][] generateLvl(int lvlNumber){
         String [][] map = new String[hexLvlY.get(lvlNumber)][hexLvlX.get(lvlNumber)];

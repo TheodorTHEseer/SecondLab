@@ -25,10 +25,10 @@ public class Test {
         settlement.download();
         Thread setl = new Thread(settlement, "Settlement");
         setl.start();
-        while (bankWallet>0) {
+        int key = in.nextInt();
+        while (key!=5) {
             settlement.displayMenu();
             settlement.upload();
-            int key = in.nextInt();
             if (key == 1) {
                 System.out.println("Сколько денег вы хотите вложить?");
                 int value = in.nextInt();
@@ -42,8 +42,6 @@ public class Test {
                 settlement.getBackMoney(bankWallet);
             if (key == 4)
                 settlement.displaySettlement();
-            if (key == 5)
-                break;
         }
     }
     private static void endLvlTest(){
