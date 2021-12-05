@@ -208,7 +208,7 @@ public class Settlement implements Runnable{
                 if ((countYield()-countCosts()>=0))
                     System.out.println("Казна поселения получила " + (countYield() - countCosts())+ " золотых!");
                 if ((countYield()-countCosts()<0))
-                    System.out.println("Казна ничего нен получила, тольео потртила " + (countYield() - countCosts()) + " золотых!");
+                    System.out.println("Казна ничего не получила, только потртила " + (countYield() - countCosts()) + " золотых!");
                 gainMoney(countYield() - countCosts() - getFine());
                 displayMenu();
             } catch (InterruptedException e) {
