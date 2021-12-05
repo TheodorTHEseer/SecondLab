@@ -13,7 +13,6 @@ import rooms.pac.Shop;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 
 import static Dialogs.LvlEnd.*;
@@ -31,7 +30,6 @@ import static GamePlay.pac.Fight.heal;
 
 public class Game {
     static Scanner in = new Scanner(System.in);
-    static Random rnd = new Random();
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {
         Thread logsThread = new Thread(new MgmtGeneral(),"LogsThread");
         logsThread.start();
@@ -60,7 +58,7 @@ public class Game {
                     expedition.start();
                     new SquadException(expedition, getNPE(mySquad));
                 } else {
-                    System.out.println("#загляни в банк и обращайся снова");
+                    System.out.println("загляни в банк и обращайся снова");
                 }
             }
             if (key == 3) {
@@ -78,7 +76,7 @@ public class Game {
                 saveGame(currentLvl);
                 break;
             }
-            if (key == 7 && returnStatuses() == true) {
+            if (key == 7 && returnStatuses()) {
                 Thread.sleep(6000);
                 showMenu(returnStatuses());
                 for (int lvlValue = 0; lvlValue < 10; lvlValue++) {
@@ -101,7 +99,7 @@ public class Game {
                     }
                 }
             }
-            if (key == 8 && returnStatuses() == true) {
+            if (key == 8 && returnStatuses()) {
                 Settlement settlement = new Settlement();
                 settlement.displayEnterMomlog();
                 settlement.getSettlement();
@@ -133,7 +131,7 @@ public class Game {
                 }
             }
         }
-        System.out.printf("Спасибо за игру!");
+        System.out.println("Спасибо за игру! "+cyanA + player.getName());
         MainEvent.stop();
         logsThread.stop();
     }
@@ -151,10 +149,6 @@ public class Game {
         }
         return player;
     }
-    private static void gameLoop(Hero player, int money){
-
-
-    }
     private static String [][] defaulMap (String [][] map,int lvlValue ,String defaultSymbol){
         for (int count=0; count<hexLvlY.get(lvlValue);count++){
             for(int count2=0; count2<hexLvlX.get(lvlValue);count2++){
@@ -166,8 +160,8 @@ public class Game {
     private static void fightInRoom(Hero player) throws InterruptedException {
         ArrayList<Enemy> enemies = new ArrayList<>();
         int enemiesMass = 4; //Кол-во врагов
-        int yLenght =8;
-        int xLenght =8;
+        int yLenght =4;
+        int xLenght =4;
         String MyMap[][] = new String[yLenght][xLenght];
         Field field = new Field(yLenght, xLenght);
         Fight fight = new Fight();
@@ -207,37 +201,6 @@ public class Game {
             Thread.sleep(3000);
         }
     }
-    private static void fightInRoom(ArrayList <Enemy> enemies, Hero player, int lvlValue) throws InterruptedException {
-        String [][] map = new String[hexLvlY.get(lvlValue)][hexLvlX.get(lvlValue)];
-        GameLogic.generateEnemies(enemyLvl.get(lvlValue), enemies, hexLvlX.get(lvlValue), hexLvlY.get(lvlValue));
-        player.xPos=0;
-        player.yPos=0;
-        while (enemies.size() > 0) {
-            if (player.getHp() <= 0)
-                break;
-            player.setDamage(GameLogic.calcDPS(player.Equipment, player.getDefaultDamage()));
-            heal(player);
-            defaulMap(map, lvlValue, "[ ]");
-            System.out.printf("Вы сейчас в %2d комнате c %2d врагами и у Вас %3d hp!\n", lvlValue, enemies.size(),player.getHp());
-            customMap(map,player,enemies);
-            Thread Controller = new Thread(new Controller(player, hexLvlY.get(lvlValue), hexLvlX.get(lvlValue)), "PlayerThread");
-            Controller.start();
-            Thread AllMobsController = new Thread(new AllMobsController(enemies, hexLvlY.get(lvlValue), hexLvlX.get(lvlValue)), "MobsThread");
-            AllMobsController.start();
-            if (fightStatusCheck(player, enemies) == true) {//Если на клетке гг стоит враг, то начинается файт
-                StartFight(player, enemies.get(fightStatusEnemyIndex(player, enemies)));
-            }
-            checkAliveStatus(enemies);//Проверяем кто жив
-            displayMap(map, lvlValue);
-            Thread.sleep(200);
-            System.out.println("\n\n");
-        }
-        //Врагов нет, а вы живы
-        if (player.getHp() > 0) {
-            System.out.println(greenA + "Поздравляю с победой в "+lvlValue +" комнате!\n"+purpleA+"Вы видите босса."+ cResetA);
-            Thread.sleep(3000);
-        }
-    }
     private static void fightInRoom(int lvlValue, Hero player) throws InterruptedException {
         ArrayList<Enemy> enemies = new ArrayList<>();
         String [][] map = new String[hexLvlY.get(lvlValue)][hexLvlX.get(lvlValue)];
@@ -256,7 +219,7 @@ public class Game {
             Controller.start();
             Thread AllMobsController = new Thread(new AllMobsController(enemies, hexLvlY.get(lvlValue), hexLvlX.get(lvlValue)), "MobsThread");
             AllMobsController.start();
-            if (fightStatusCheck(player, enemies) == true) {//Если на клетке гг стоит враг, то начинается файт
+            if (fightStatusCheck(player, enemies)) {//Если на клетке гг стоит враг, то начинается файт
                 StartFight(player, enemies.get(fightStatusEnemyIndex(player, enemies)));
             }
             checkAliveStatus(enemies);//Проверяем кто жив
@@ -274,7 +237,7 @@ public class Game {
             System.out.println(getEndDialog(lvlValue));
             String answer;
             answer=in.nextLine();
-            if (answer.toLowerCase().equals(getEndTAns(lvlValue).toLowerCase())) {
+            if (answer.equalsIgnoreCase(getEndTAns(lvlValue))) {
                 System.out.println(getEndAfterY(lvlValue) + purpleA + player.getName() + cResetA);
             }
             else {
