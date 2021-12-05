@@ -41,9 +41,9 @@ public class Test {
                 settlement.getBackMoney(bankWallet);
             if (key == 4)
                 settlement.displaySettlement();
-
-
+            settlement.upload();
         }
+
        /* settlement.getSettlement();
         settlement.displaySettlement();
         settlement.shopNewBuilding(bankWallet);

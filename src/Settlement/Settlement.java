@@ -2,9 +2,13 @@ package Settlement;
 
 import Settlement.Buildings.*;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.Scanner;
 
 import static FileMgmt.Color.*;
+import static FileMgmt.MgmtCfg.home;
+import static FileMgmt.MgmtGeneral.logs;
 
 public class Settlement implements Runnable{
     Scanner in = new Scanner(System.in);
@@ -17,11 +21,11 @@ public class Settlement implements Runnable{
     public void gainMoney(int money){
         moneyValue=moneyValue+money;
     }
-    public void investMoney(int mMoney){ //TODO добавить инвестиции
+    public void investMoney(int mMoney){
         if (mMoney>0)
             gainMoney(mMoney);
     }
-    public int getBackMoney(int mMoney){//TODO добавить вывод денег
+    public int getBackMoney(int mMoney){
         System.out.println("Сколько хотите забрать?");
         int value = in.nextInt();
         if (value<=moneyValue){
@@ -122,6 +126,7 @@ public class Settlement implements Runnable{
         int yC = in.nextInt();
         if (xC<=xL&&yC<=yL && building.getCost()<=moneyValue) {
             SettlementMap[xC][yC] = building;
+            building.setCord(xC, yC);
             moneyValue=moneyValue-building.getCost();
         }
         else
@@ -151,12 +156,21 @@ public class Settlement implements Runnable{
     }
     private int countYield(){
         int yield;
-        yield = countBuildings("[\u001B[36mMine\u001B[0m]")*55+countBuildings("[\u001B[36mMark\u001B[0m]")*100;
+        Building mine = new Mine();
+        Building market = new Market();
+        Building townHall = new TownHall();
+        yield = countBuildings("[\u001B[36mMine\u001B[0m]")*mine.getYield()+
+                countBuildings("[\u001B[36mMark\u001B[0m]")*market.getYield();
         return yield;
     }
     private int countCosts(){
         int costs;
-        costs = countBuildings("[\u001B[36mMine\u001B[0m]")*20+countBuildings("[\u001B[36mMark\u001B[0m]")*10+countBuildings("[\u001B[36mHall\u001B[0m]")*50;
+        Building mine = new Mine();
+        Building market = new Market();
+        Building townHall = new TownHall();
+        costs = countBuildings("[\u001B[36mMine\u001B[0m]")*mine.getSpends()+
+                countBuildings("[\u001B[36mMark\u001B[0m]")*market.getSpends()+
+                countBuildings("[\u001B[36mHall\u001B[0m]")*townHall.getSpends();
         return costs;
     }
     private int laborersM(){
@@ -199,6 +213,54 @@ public class Settlement implements Runnable{
             System.out.println("Прибыль снижена!");
         }
         return fine;
+    }
+
+    public void upload(){
+        try {
+            FileWriter fileWriter = new FileWriter(home + File.separator + "Desktop" + File.separator +
+                    "testGameFolder"+File.separator+ "Settlement.txt" , false);
+            int counter = countNotLocked();
+            try {
+                while (counter>0){
+                   Building building = searchBuilding();
+                   fileWriter.write(counter+"|"+ building.getStringInfo());
+                   counter--;
+                }
+            }
+            catch (NullPointerException exception)
+            {
+               logs.put(logs.size()+1, "Здание в поселении ещё не построено");
+            }
+            fileWriter.close();
+        }
+        catch (Exception exception){
+            logs.put(logs.size()+1,"Поселение не сохранено| " + exception.getMessage());
+        }
+    }
+    private int countNotLocked(){
+        int counter=0;
+        for (int count0=0; count0<xL; count0++){
+            for (int count1=0; count1<yL; count1++){
+                if(SettlementMap[count0][count1].getName().equals("[\u001B[36mHall\u001B[0m]") == true)
+                    counter++;
+                if(SettlementMap[count0][count1].getName().equals("[\u001B[36mMine\u001B[0m]") == true)
+                    counter++;
+                if(SettlementMap[count0][count1].getName().equals("[\u001B[36mMark\u001B[0m]") == true)
+                    counter++;
+            }
+        }
+        return counter;
+    }
+    private Building searchBuilding () {
+        for (int count0 = 0; count0 < xL; count0++) {
+            for (int count1 = 0; count1 < yL; count1++) {
+                if (SettlementMap[count0][count1].getName().equals("[\u001B[36mHall\u001B[0m]") ||
+                        SettlementMap[count0][count1].getName().equals("[\u001B[36mMine\u001B[0m]") ||
+                        SettlementMap[count0][count1].getName().equals("[\u001B[36mMark\u001B[0m]") == true)
+                    return SettlementMap[count0][count1];
+            }
+        }
+        return null;
     }
     @Override
     public void run() {
