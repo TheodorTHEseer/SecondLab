@@ -4,6 +4,7 @@ import Settlement.Buildings.*;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static FileMgmt.Color.*;
@@ -14,10 +15,16 @@ public class Settlement implements Runnable{
     Scanner in = new Scanner(System.in);
     private int xL=8;
     private int yL=14;
+
+    public int getMoneyValue() {
+        return moneyValue;
+    }
+
     private int moneyValue;
     private void displayMoney(){
         System.out.println("В казне " + moneyValue + " золотых!");
     }
+
     public void gainMoney(int money){
         moneyValue=moneyValue+money;
     }
@@ -39,10 +46,13 @@ public class Settlement implements Runnable{
 
     public Settlement (){
     }
-    public Building[][] SettlementMap = new Building[xL][yL];
+
+    private Building[][] SettlementMap = new Building[xL][yL];
+    private ArrayList <Building> BuildingsRd = new ArrayList<>();
     public void displayEnterMomlog(){
         System.out.printf("\u001B[36mПривратник\u001B[0m: Добро пожаловать на ваши замли, милорд!\n");
     }
+
     public void displayMenu(){
         System.out.printf(" [1] - Инвестировать в посление.\n" +
                 " [2] - Приступить к строительству. \n" +
@@ -60,8 +70,16 @@ public class Settlement implements Runnable{
             System.out.println("В поселении свободны от работы " +def+ " рабочих.");
     }
     public void displaySettlement(){
-        System.out.printf("\u001B[32mx\\y%6s%6s%6s%6s%6s%6s%6s%6s%6s%6s%6s%6s%6s%6s\u001B[0m\n",
-                "0↴","1↴","2↴","3↴","4↴","5↴","6↴","7↴","8↴","9↴","10↴","11↴","12↴","13↴");
+        System.out.print(greenA+ "x\\y");
+        for (int count=0; count<yL; count++){
+            if (count<10)
+                System.out.printf("%5s%1d","↴",count);
+            if(count>=10)
+                System.out.printf("%4s%2d","↴",count);
+            if (count>100)
+                System.out.printf("%3s%3d","↴",count);
+        }
+        System.out.println(cResetA);
         for (int count=0; count<xL;count++){
             System.out.print(greenA+count + "↱ " + cResetA);
             for (int count1=0;count1<yL;count1++){
@@ -128,6 +146,7 @@ public class Settlement implements Runnable{
             SettlementMap[xC][yC] = building;
             building.setCord(xC, yC);
             moneyValue=moneyValue-building.getCost();
+            BuildingsRd.add(building);
         }
         else
             System.out.printf("Индексы доступные для х координаты: %2d, для у координаты: %2d. \n" +
@@ -214,27 +233,30 @@ public class Settlement implements Runnable{
         }
         return fine;
     }
-
     public void upload(){
         try {
             FileWriter fileWriter = new FileWriter(home + File.separator + "Desktop" + File.separator +
-                    "testGameFolder"+File.separator+ "Settlement.txt" , false);
-            int counter = countNotLocked();
-            try {
-                while (counter>0){
-                   Building building = searchBuilding();
-                   fileWriter.write(counter+"|"+ building.getStringInfo());
-                   counter--;
+                    "testGameFolder"+File.separator+ "SettlementBuildings.txt" , false);
+            for (int count =0; count<BuildingsRd.size(); count++) {
+                try {
+                    fileWriter.write(BuildingsRd.get(count).getStringInfo()+"\n");
+                } catch (Exception exception) {
+                    logs.put(logs.size() + 1, "Здание в поселении ещё не построено");
                 }
-            }
-            catch (NullPointerException exception)
-            {
-               logs.put(logs.size()+1, "Здание в поселении ещё не построено");
             }
             fileWriter.close();
         }
         catch (Exception exception){
             logs.put(logs.size()+1,"Поселение не сохранено| " + exception.getMessage());
+        }
+        try {
+            FileWriter fileWriter = new FileWriter(home + File.separator + "Desktop" + File.separator +
+                    "testGameFolder" + File.separator + "SettlementMoney.txt", false);
+            fileWriter.write(String.valueOf(moneyValue));
+            fileWriter.close();
+        }
+        catch (Exception e){
+            logs.put(logs.size(), "Ошибка записи файла поселения" + e.getMessage());
         }
     }
     private int countNotLocked(){
@@ -251,17 +273,7 @@ public class Settlement implements Runnable{
         }
         return counter;
     }
-    private Building searchBuilding () {
-        for (int count0 = 0; count0 < xL; count0++) {
-            for (int count1 = 0; count1 < yL; count1++) {
-                if (SettlementMap[count0][count1].getName().equals("[\u001B[36mHall\u001B[0m]") ||
-                        SettlementMap[count0][count1].getName().equals("[\u001B[36mMine\u001B[0m]") ||
-                        SettlementMap[count0][count1].getName().equals("[\u001B[36mMark\u001B[0m]") == true)
-                    return SettlementMap[count0][count1];
-            }
-        }
-        return null;
-    }
+
     @Override
     public void run() {
         for (int count=1; count>0; count++) {
@@ -274,7 +286,7 @@ public class Settlement implements Runnable{
                 gainMoney(countYield() - countCosts() - getFine());
                 displayMenu();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logs.put(logs.size(),"Деньги не получены| " + e.getMessage());
             }
         }
     }

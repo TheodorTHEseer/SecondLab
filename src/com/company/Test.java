@@ -26,6 +26,7 @@ public class Test {
         setl.start();
         while (bankWallet>0) {
             settlement.displayMenu();
+            settlement.upload();
             int key = in.nextInt();
             if (key == 1) {
                 System.out.println("Сколько денег вы хотите вложить?");
@@ -41,7 +42,6 @@ public class Test {
                 settlement.getBackMoney(bankWallet);
             if (key == 4)
                 settlement.displaySettlement();
-            settlement.upload();
         }
 
        /* settlement.getSettlement();
