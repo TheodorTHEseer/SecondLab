@@ -11,6 +11,7 @@ import cretures.pac.Hero;
 import rooms.pac.Bank;
 import rooms.pac.Shop;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -21,6 +22,7 @@ import static Dungeon.Maps.*;
 import static Dungeon.Speaker.showMenu;
 import static FileMgmt.Color.*;
 import static FileMgmt.MgmtCfg.*;
+import static FileMgmt.Start.loadCurrentLvl;
 import static GamePlay.pac.Expedition.checkExpeditionStatus;
 import static GamePlay.pac.Expedition.getNPE;
 import static GamePlay.pac.Field.*;
@@ -30,7 +32,7 @@ import static GamePlay.pac.Fight.heal;
 public class Game {
     static Scanner in = new Scanner(System.in);
     static Random rnd = new Random();
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, FileNotFoundException {
         Thread logsThread = new Thread(new MgmtGeneral(),"LogsThread");
         logsThread.start();
         loadInfo();
@@ -38,7 +40,7 @@ public class Game {
         int myBankWallet = 0;
         boolean eventStatus = false;
         int bankWallet = 0;
-        int currentLvl = 0;
+        int currentLvl = loadCurrentLvl();
         Hero player = loadSaves(bankWallet);
         player.giveStartedSword();
         ArrayList<Creature> mySquad = new ArrayList<>();
@@ -72,7 +74,8 @@ public class Game {
                 player.setName(useCfg(player.getName()));
             }
             if (key == 6) {
-                saveGame(player, myBankWallet, currentLvl);
+                saveGame(player, myBankWallet);
+                saveGame(currentLvl);
                 break;
             }
             if (key == 7 && returnStatuses() == true) {
@@ -105,6 +108,7 @@ public class Game {
                 settlement.download();
                 Thread setl = new Thread(settlement, "Settlement");
                 setl.start();
+                settlement.displayMenu();
                 int keyS = in.nextInt();
                 while (keyS != 5) {
                     settlement.displayMenu();
@@ -122,9 +126,16 @@ public class Game {
                         settlement.getBackMoney(bankWallet);
                     if (keyS == 4)
                         settlement.displaySettlement();
+                    if (keyS == 5)
+                        break;
+                    settlement.displayMenu();
+                    keyS = in.nextInt();
                 }
             }
         }
+        System.out.printf("Спасибо за игру!");
+        MainEvent.stop();
+        logsThread.stop();
     }
 
     private static Hero loadSaves(int bankWallet){

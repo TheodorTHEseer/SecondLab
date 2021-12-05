@@ -92,14 +92,13 @@ public class MgmtCfg {
             System.out.println(e.getMessage());
         }
     }
-    public static void saveGame (Hero player, int bankWallet, int currentLvl){
-        saveGame(player, bankWallet);
+    public static void saveGame (int currentLvl){
         try {
             FileWriter fileWriter = new FileWriter (home + File.separator + "Desktop" + File.separator +
-                    "testGameFolder"+File.separator+ "lvl.txt" , false);
+                    "testGameFolder"+File.separator+ "CurrentLvl.txt" , false);
             fileWriter.write(currentLvl);
             fileWriter.close();
-            logs.put(logs.size()+1, "Уровень сохранён успешно");
+            logs.put(logs.size(), "Уровень сохранён успешно");
         }
         catch (Exception e){
             System.out.println(e.getMessage());
