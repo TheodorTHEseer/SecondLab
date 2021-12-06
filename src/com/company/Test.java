@@ -49,7 +49,7 @@ public class Test {
             System.out.println(getEndDialog(count));
             String answer;
             answer=in.nextLine();
-            if (answer.toLowerCase().equals(getEndTAns(count).toLowerCase()))
+            if (answer.equalsIgnoreCase(getEndTAns(count)))
                 System.out.println(getEndAfterY(count) + "Master");
             else
                 System.out.println(getEndAfterN(count));
