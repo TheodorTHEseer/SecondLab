@@ -40,7 +40,7 @@ public class Start {
             currentLvl = Integer.parseInt(scanner.nextLine());
         }
         catch (Exception e){
-            logs.put(logs.size(), "Ошибка загурзки уровня!");
+            logs.put(logs.size(), "Ошибка загурзки уровня!" + e.getMessage());
         }
         return currentLvl;
     }

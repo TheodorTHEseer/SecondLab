@@ -18,7 +18,7 @@ import java.util.Scanner;
 import static Dialogs.LvlEnd.*;
 import static Dungeon.MainEvent.returnStatuses;
 import static Dungeon.Maps.*;
-import static Dungeon.Speaker.showMenu;
+import static Dialogs.Speaker.showMenu;
 import static FileMgmt.Color.*;
 import static FileMgmt.MgmtCfg.*;
 import static FileMgmt.Start.loadCurrentLvl;

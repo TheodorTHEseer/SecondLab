@@ -1,10 +1,17 @@
-package Dungeon;
+package Dialogs;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Speaker {
-    private static Map<Integer, String> lvlEnter = new HashMap<>();
+    private static final Map<String, String> speakerMonologs = new HashMap<>();
+    private void setSpeakerMonologs(){
+        speakerMonologs.put("welcome", "Ваше вашество, добро пожаловать на земли свободной Фракии, путник!");
+        speakerMonologs.put("arena", "На арене путник хотел подзаработать легкого и звонкого золота для безбедной жизни, но нашёл испытания своих сил.");
+    }
+    public void getMonolog(String action){
+        speakerMonologs.get(action);
+    }
 
     public static void showMenu(boolean mainEventStatus){
         if (mainEventStatus == false)
@@ -27,4 +34,6 @@ public class Speaker {
                     "\u001B[32m [7] - отправиться искать лекарство.\u001B[0m\n" +
                     " [8] - отправиться в посление.");
     }
+
+
 }
