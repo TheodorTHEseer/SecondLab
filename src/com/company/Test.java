@@ -21,6 +21,7 @@ public class Test {
         int bankWallet =10000000;
         Settlement settlement = new Settlement();
         settlement.displayEnterMomlog();
+        settlement.displayMenu();
         settlement.getSettlement();
         settlement.download();
         Thread setl = new Thread(settlement, "Settlement");
