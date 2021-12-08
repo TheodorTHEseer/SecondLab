@@ -18,6 +18,9 @@ import static GamePlay.pac.Field.displayMap;
 public class Test {
     static Scanner in = new Scanner(System.in);
     public static void main(String[] args) {
+
+    }
+    private void setlTest(){
         int bankWallet =10000000;
         Settlement settlement = new Settlement();
         settlement.displayEnterMomlog();
