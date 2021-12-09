@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static FileMgmt.MgmtCfg.home;
-import static FileMgmt.MgmtGeneral.logs;
+import static FileMgmt.Logs.logs;
 
 public class Enemy extends Creature{
     char holdspace;
@@ -43,11 +43,11 @@ public class Enemy extends Creature{
             FileWriter fileWriter = new FileWriter(home + File.separator + "Desktop" + File.separator +
                     "testGameFolder" + File.separator + "enemy"+id+".txt", false);
             fileWriter.write(getLine());
-            logs.put(logs.size()+1,"Запись файла врага: "+id+"|Done");
+            logs.add("Запись файла врага: "+id+"|Done");
             fileWriter.close();
         }
         catch (Exception e){
-            logs.put(logs.size()+1,"Запись файла врага: "+id+"|Fail" + e.getMessage());
+            logs.add("Запись файла врага: "+id+"|Fail" + e.getMessage());
         }
     }
     public void addWeapon(){

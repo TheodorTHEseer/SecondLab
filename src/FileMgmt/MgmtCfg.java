@@ -6,7 +6,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static FileMgmt.MgmtGeneral.logs;
+import static FileMgmt.Logs.logs;
 
 public class MgmtCfg {
     static Scanner in = new Scanner(System.in);
@@ -98,10 +98,11 @@ public class MgmtCfg {
                     "testGameFolder"+File.separator+ "CurrentLvl.txt" , false);
             fileWriter.write(currentLvl);
             fileWriter.close();
-            logs.put(logs.size(), "Уровень сохранён успешно");
+            logs.add("Уровень сохранён успешно");
         }
         catch (Exception e){
             System.out.println(e.getMessage());
+            logs.add("Уровень не сохранён");
         }
     }
     static public void loadGame(Hero player, int bankWallet){

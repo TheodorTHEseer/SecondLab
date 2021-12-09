@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 import static FileMgmt.Color.*;
 import static FileMgmt.MgmtCfg.home;
-import static FileMgmt.MgmtGeneral.logs;
+import static FileMgmt.Logs.logs;
 
 public class Settlement implements Runnable{
     Scanner in = new Scanner(System.in);
@@ -237,6 +237,7 @@ public class Settlement implements Runnable{
             }
             System.out.println("Прибыль снижена!");
         }
+        logs.add(fine + "Setl|getFine|Прибыль расчитана");
         return fine;
     }
     public void upload(){
@@ -246,14 +247,15 @@ public class Settlement implements Runnable{
             for (int count =0; count<BuildingsRd.size(); count++) {
                 try {
                     fileWriter.write(BuildingsRd.get(count).getStringInfo()+":");
+                    logs.add("Setl|upload|запись массива данных успешна");
                 } catch (Exception exception) {
-                    logs.put(logs.size() + 1, "Здание в поселении ещё не построено");
+                    logs.add("Setl|upload|Здание в поселении ещё не построено");
                 }
             }
             fileWriter.close();
         }
         catch (Exception exception){
-            logs.put(logs.size()+1,"Поселение не сохранено| " + exception.getMessage());
+            logs.add("Setl|upload|Поселение не сохранено| " + exception.getMessage());
         }
         try {
             FileWriter fileWriter = new FileWriter(home + File.separator + "Desktop" + File.separator +
@@ -262,18 +264,18 @@ public class Settlement implements Runnable{
             fileWriter.close();
         }
         catch (Exception e){
-            logs.put(logs.size(), "Ошибка записи файла поселения" + e.getMessage());
+            logs.add("Setl|upload|Ошибка записи файла поселения" + e.getMessage());
         }
     }
     public void download(){
-        logs.put(logs.size(), "Загрузка деревни начата!");
+        logs.add("Setl|download|Загрузка деревни начата!");
         try {
             FileReader fileReader = new FileReader(home + File.separator + "Desktop" + File.separator +
                     "testGameFolder" + File.separator + "SettlementBuildings.txt");
             Scanner scanner = new Scanner(fileReader);
                 try {
                     String[] stringsBuilds = scanner.nextLine().split(":");
-                    logs.put(logs.size(), "Массив построек разбит!");
+                    logs.add("Set|download|Массив построек разбит!");
                     for (int count=0;count<stringsBuilds.length; count++){
                         String [] paramsMas = stringsBuilds[count].split(",");
                         String name = String.valueOf(paramsMas[0]);
@@ -295,13 +297,14 @@ public class Settlement implements Runnable{
                             addSavedBuilding(townHall);
                         }
                     }
+                    logs.add("Setl|download|Сейв удался");
                 } catch (Exception exception) {
-                    logs.put(logs.size() + 1, "Здание в поселении ещё не построено");
+                    logs.add("Setl|download|Fail: " + exception.getMessage());
                 }
             fileReader.close();
         }
         catch (Exception exception){
-            logs.put(logs.size()+1,"Поселение не сохранено| " + exception.getMessage());
+            logs.add("Setl|download|Fail: "+ exception.getMessage());
         }
         try {
             FileReader fileReader = new FileReader(home + File.separator + "Desktop" + File.separator +
@@ -310,17 +313,19 @@ public class Settlement implements Runnable{
             int money = scan.nextInt();
             fileReader.close();
             setMoneyValue(money);
+            logs.add("Setl|download|Данные об игроке успешно загружены");
         } catch (Exception e) {
-            logs.put(logs.size(), "Нет записи о деньгах");
+            logs.add("Setl|download|Нет записи о деньгах");
         }
 
     }
     private void addSavedBuilding(Building building){
         try {
             SettlementMap[building.getxCord()][building.getyCord()] = building;
+            logs.add("Setl|download|зднаие успешно помещено на карту" + building.getName());
         }
         catch (NullPointerException e){
-            logs.put(logs.size(), "Здания нет" + e.getMessage());
+            logs.add( "Setl|download|Здания нет" + e.getMessage());
         }
     }
 
@@ -335,8 +340,9 @@ public class Settlement implements Runnable{
                     System.out.println("Казна ничего не получила, только потртила " + (countYield() - countCosts()) + " золотых!");
                 gainMoney(countYield() - countCosts() - getFine());
                 displayMenu();
+                logs.add("Setl|Run|Деньги получены| ");
             } catch (InterruptedException e) {
-                logs.put(logs.size(),"Деньги не получены| " + e.getMessage());
+                logs.add("Setl|Run|Деньги не получены| " + e.getMessage());
             }
         }
     }

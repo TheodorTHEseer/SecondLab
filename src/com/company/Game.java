@@ -1,7 +1,7 @@
 package com.company;
 
 import Dungeon.MainEvent;
-import FileMgmt.MgmtGeneral;
+import FileMgmt.Logs;
 import FileMgmt.Start;
 import GamePlay.pac.*;
 import Settlement.Settlement;
@@ -31,7 +31,7 @@ import static GamePlay.pac.Fight.heal;
 public class Game {
     static Scanner in = new Scanner(System.in);
     public static void main(String[] args) throws InterruptedException, FileNotFoundException {
-        Thread logsThread = new Thread(new MgmtGeneral(),"LogsThread");
+        Thread logsThread = new Thread(new Logs(),"LogsThread");
         logsThread.start();
         loadInfo();
         loadDialogs();

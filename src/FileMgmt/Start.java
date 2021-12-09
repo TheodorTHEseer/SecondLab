@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
 
-import static FileMgmt.MgmtGeneral.logs;
+import static FileMgmt.Logs.logs;
 
 public class Start {
     public static String home = System.getProperty("user.home");
@@ -26,9 +26,9 @@ public class Start {
             confSubDirCreateSream.mkdir();
         }
         catch (Exception e){
-            logs.put(logs.size(),"Создание папки игры|Fail" + e.getMessage() );
+            logs.add("Создание папки игры|Fail" + e.getMessage() );
         }
-        logs.put(logs.size(),"Создание папки игры|Done" );
+        logs.add("Создание папки игры|Done" );
     }
 
     public static int loadCurrentLvl() throws FileNotFoundException {
@@ -40,7 +40,7 @@ public class Start {
             currentLvl = Integer.parseInt(scanner.nextLine());
         }
         catch (Exception e){
-            logs.put(logs.size(), "Ошибка загурзки уровня!" + e.getMessage());
+            logs.add("Ошибка загурзки уровня!" + e.getMessage());
         }
         return currentLvl;
     }

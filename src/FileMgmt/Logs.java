@@ -3,19 +3,21 @@ package FileMgmt;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static FileMgmt.Color.*;
 import static FileMgmt.MgmtCfg.home;
 
-public class MgmtGeneral implements Runnable{
-    public static Map <Integer, String> logs = new HashMap<>();
+public class Logs implements Runnable{
+    public static ArrayList <String> logs = new ArrayList<>(100);
+    public static void add (String str){
+        logs.add(logs.size(), str);
+    }
     private static void saveLogs(){
         try{
             Date date = new Date();
-            logs.put(0, date.toString());
+            logs.add(0, date.toString());
             FileWriter fileWriter = new FileWriter(home + File.separator + "Desktop" + File.separator +
                     "testGameFolder"+File.separator+ "logs.txt" , true);
             String logString;
@@ -36,7 +38,7 @@ public class MgmtGeneral implements Runnable{
         try {
             for (int count=0; count>=0; count++) {
                 saveLogs();
-                Thread.sleep(120000);
+                Thread.sleep(50000);//Каждые 50 секунд, так как логи появляются нечасто
                 System.out.println(blackA+"save done"+cResetA);
             }
         }
