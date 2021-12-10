@@ -8,7 +8,7 @@ import cretures.pac.Hero;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static Dialogs.LvlEnd.*;
+import static Speaker.LvlEnd.*;
 import static Dungeon.Dungeon.generateEnemiesArray;
 import static Dungeon.Dungeon.generateLvl;
 import static Dungeon.Maps.*;

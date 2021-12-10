@@ -1,4 +1,4 @@
-package Dialogs;
+package Speaker;
 
 import java.util.HashMap;
 import java.util.Map;

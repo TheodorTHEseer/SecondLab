@@ -15,11 +15,11 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static Dialogs.LvlEnd.*;
+import static Speaker.LvlEnd.*;
 import static Dungeon.MainEvent.returnStatuses;
 import static Dungeon.Maps.*;
-import static Dialogs.Speaker.showMenu;
 import static FileMgmt.Color.*;
+import static FileMgmt.Logs.logs;
 import static FileMgmt.MgmtCfg.*;
 import static FileMgmt.Start.loadCurrentLvl;
 import static GamePlay.pac.Expedition.checkExpeditionStatus;
@@ -27,6 +27,7 @@ import static GamePlay.pac.Expedition.getNPE;
 import static GamePlay.pac.Field.*;
 import static GamePlay.pac.Fight.StartFight;
 import static GamePlay.pac.Fight.heal;
+import static Speaker.Speaker.*;
 
 public class Game {
     static Scanner in = new Scanner(System.in);
@@ -44,6 +45,7 @@ public class Game {
         ArrayList<Creature> mySquad = new ArrayList<>();
         Thread MainEvent = new Thread(new MainEvent(eventStatus, player), "MainEventThread");
         MainEvent.start();
+        loadMonologs();
         while (player.getHp() > 0) {
             showMenu(returnStatuses());
             int key = in.nextInt();
@@ -82,21 +84,14 @@ public class Game {
                 for (int lvlValue = 0; lvlValue < 10; lvlValue++) {
                     if (currentLvl >= lvlValue) {
                         lvlValue=currentLvl;
-                        fightInRoom(lvlValue, player);
-                        Thread.sleep(1000);
-                        if (player.getHp() <= 0)
-                            break;
-                        endLvlDialog(player, lvlValue);
-                        currentLvl++;
                     }
-                    else {
-                        fightInRoom(lvlValue, player);
-                        Thread.sleep(1000);
-                        if (player.getHp() <= 0)
-                            break;
-                        endLvlDialog(player, lvlValue);
-                        currentLvl++;
-                    }
+                    getMonolog(lvlValue);
+                    fightInRoom(lvlValue, player);
+                    Thread.sleep(1000);
+                    if (player.getHp() <= 0)
+                        break;
+                    endLvlDialog(player, lvlValue);
+                    currentLvl++;
                 }
             }
             if (key == 8 && returnStatuses()) {
@@ -129,11 +124,14 @@ public class Game {
                     settlement.displayMenu();
                     keyS = in.nextInt();
                 }
+                setl.stop();
             }
         }
         System.out.println("Спасибо за игру! "+cyanA + player.getName());
         MainEvent.stop();
         logsThread.stop();
+
+
     }
 
     private static Hero loadSaves(int bankWallet){
@@ -147,6 +145,7 @@ public class Game {
             loadGame(player, bankWallet);
             System.out.println("С возвращением! \u001B[36m" + player.getName()+"\u001B[0m");
         }
+        logs.add("Cfg загружен");
         return player;
     }
     private static String [][] defaulMap (String [][] map,int lvlValue ,String defaultSymbol){
@@ -155,6 +154,7 @@ public class Game {
                 map[count][count2] = defaultSymbol;
             }
         }
+        logs.add("Карта загружена");
         return map;
     }
     private static void fightInRoom(Hero player) throws InterruptedException {
@@ -194,11 +194,13 @@ public class Game {
             field.displayMap(MyMap, yLenght, xLenght);
             Thread.sleep(1000);
             System.out.println("\n\n");
+            logs.add("Ход на карте удался");
         }
         //Врагов нет, а вы живы
         if (player.getHp() > 0) {
             System.out.println(greenA + "Поздравляю с победой"+ cResetA);
             Thread.sleep(3000);
+            logs.add("Битва на уровне выиграна");
         }
     }
     private static void fightInRoom(int lvlValue, Hero player) throws InterruptedException {

@@ -149,10 +149,15 @@ public class Settlement implements Runnable{
         System.out.println("Введите y координату");
         int yC = in.nextInt();
         if (xC<=xL&&yC<=yL && building.getCost()<=moneyValue) {
-            SettlementMap[xC][yC] = building;
-            building.setCord(xC, yC);
-            moneyValue=moneyValue-building.getCost();
-            BuildingsRd.add(building);
+            try {
+                SettlementMap[xC][yC] = building;
+                building.setCord(xC, yC);
+                moneyValue = moneyValue - building.getCost();
+                BuildingsRd.add(building);
+            }
+            catch (Exception e){
+                logs.add("Setl|AddBuild|Выход за пределы значений массива");
+            }
         }
         else
             System.out.printf("Индексы доступные для х координаты: %2d, для у координаты: %2d. \n" +
@@ -237,7 +242,7 @@ public class Settlement implements Runnable{
             }
             System.out.println("Прибыль снижена!");
         }
-        logs.add(fine + "Setl|getFine|Прибыль расчитана");
+        logs.add(fine + "Setl|getFine|Прибыль рассчитана");
         return fine;
     }
     public void upload(){
