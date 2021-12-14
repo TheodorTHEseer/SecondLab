@@ -105,7 +105,7 @@ public class MgmtCfg {
             logs.add("Уровень не сохранён");
         }
     }
-    static public void loadGame(Hero player, int bankWallet){
+    static public int loadGame(Hero player, int bankWallet){
         String line = null;
         try {
             FileReader fileReader = new FileReader(home + File.separator + "Desktop" + File.separator +
@@ -130,10 +130,13 @@ public class MgmtCfg {
             catch (NumberFormatException exception) //Тут может не быть цифр. Но банковский счёт - не часть персанажа, поэтому нестрашно
             {
                 System.out.println("Файл был повреждён.");
+                logs.add("MgmtCfg|PlayerLoad|Fail");
             }
         }
         catch (Exception e){
             System.out.println(e.getMessage());
         }
+        logs.add("MgmtCfg|PlayerLoad|Done");
+        return bankWallet;
     }
 }

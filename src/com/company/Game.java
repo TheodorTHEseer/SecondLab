@@ -38,9 +38,17 @@ public class Game {
         loadDialogs();
         int myBankWallet = 0;
         boolean eventStatus = false;
-        int bankWallet = 0;
         int currentLvl = loadCurrentLvl();
-        Hero player = loadSaves(bankWallet);
+        Hero player = new Hero();
+        if (Start.uploadCheck()==false) {
+            Start.upload();
+            createCfg();
+            player.setName(useCfg(player.getName()));
+        }
+        else{
+            myBankWallet = loadGame(player,myBankWallet);
+            player = loadSaves(myBankWallet);
+        }
         player.giveStartedSword();
         ArrayList<Creature> mySquad = new ArrayList<>();
         Thread MainEvent = new Thread(new MainEvent(eventStatus, player), "MainEventThread");
@@ -79,12 +87,11 @@ public class Game {
                 break;
             }
             if (key == 7 && returnStatuses()) {
-                Thread.sleep(6000);
+                Thread.sleep(1000);
                 showMenu(returnStatuses());
                 for (int lvlValue = 0; lvlValue < 10; lvlValue++) {
-                    if (currentLvl >= lvlValue) {
+                    if (currentLvl >= lvlValue)
                         lvlValue=currentLvl;
-                    }
                     getMonolog(lvlValue);
                     fightInRoom(lvlValue, player);
                     Thread.sleep(1000);
@@ -109,14 +116,14 @@ public class Game {
                     if (keyS == 1) {
                         System.out.println("Сколько денег вы хотите вложить?");
                         int value = in.nextInt();
-                        if (value <= bankWallet)
+                        if (value <= myBankWallet)
                             settlement.investMoney(value);
                     }
                     if (keyS == 2) {
-                        settlement.shopNewBuilding(bankWallet);
+                        settlement.shopNewBuilding(myBankWallet);
                     }
                     if (keyS == 3)
-                        settlement.getBackMoney(bankWallet);
+                        settlement.getBackMoney(myBankWallet);
                     if (keyS == 4)
                         settlement.displaySettlement();
                     if (keyS == 5)

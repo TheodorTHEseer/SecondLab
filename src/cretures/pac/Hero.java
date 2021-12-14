@@ -57,6 +57,7 @@ public class Hero extends Creature {
     }
 
     char holdspace;
+     public Hero(){}
     public Hero (String name, int hp, int damage, int exp, int dexteritySkill, int money) {
         super(name, hp, dexteritySkill, damage);
         holdspace = name.charAt(0);

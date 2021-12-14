@@ -38,8 +38,7 @@ public class Logs implements Runnable{
         try {
             for (int count=0; count>=0; count++) {
                 saveLogs();
-                Thread.sleep(50000);//Каждые 50 секунд, так как логи появляются нечасто
-                System.out.println(blackA+"save done"+cResetA);
+                Thread.sleep(5000);
             }
         }
         catch (Exception e){
